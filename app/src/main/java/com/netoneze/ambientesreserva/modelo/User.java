@@ -1,24 +1,25 @@
 package com.netoneze.ambientesreserva.modelo;
+import com.google.firebase.auth.FirebaseUser;
 
 public class User {
 
-    private int userId;
+    private String userId;
     private String nome;
     private String email;
     private String ra;
 
-    public User(int userId, String nome, String email, String ra) {
-        this.userId = userId;
-        this.nome = nome;
-        this.email = email;
-        this.ra = ra;
+    public User(FirebaseUser user, int userId, String nome, String email, String ra) {
+        this.userId = user.getUid();
+        this.email = user.getEmail();
+        this.nome = user.getDisplayName();
+        this.ra = user.getPhoneNumber();
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
