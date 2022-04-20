@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "219167540833",
+    "firebase_url": "https://reserva-de-ambientes-netoneze-default-rtdb.firebaseio.com",
+    "project_id": "reserva-de-ambientes-netoneze",
+    "storage_bucket": "reserva-de-ambientes-netoneze.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219167540833:android:b8cc95f08c38a28f4d0c20",
+        "android_client_info": {
+          "package_name": "com.netoneze.ambientesreserva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219167540833-ou2qk2dagv7on57eps0ba8fudkhr063k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4zNT-A44r0KWcawLjYfdqq44SpMik33o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219167540833-ou2qk2dagv7on57eps0ba8fudkhr063k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
