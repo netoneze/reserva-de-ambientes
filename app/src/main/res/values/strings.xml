@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Reserva de Ambientes</string>
+    <string name="home">Home</string>
+    <string name="schedule">Schedule</string>
+    <string name="agenda">Agenda</string>
+    <string name="profile">Profile</string>
 </resources>
