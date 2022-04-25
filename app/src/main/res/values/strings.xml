@@ -4,4 +4,8 @@
     <string name="schedule">Schedule</string>
     <string name="agenda">Agenda</string>
     <string name="profile">Profile</string>
+    <string name="name">Name</string>
+    <string name="type">Type</string>
+    <string name="department">Department</string>
+    <string name="details">Details</string>
 </resources>
