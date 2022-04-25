@@ -1,21 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/page_1"
+        android:id="@+id/home_page"
         android:enabled="true"
         android:icon="@drawable/home_48px"
         android:title="@string/home"/>
     <item
-        android:id="@+id/page_2"
+        android:id="@+id/schedule_page"
         android:enabled="true"
         android:icon="@drawable/event_available_48px"
         android:title="@string/schedule"/>
     <item
-        android:id="@+id/page_3"
+        android:id="@+id/agenda_page"
         android:enabled="true"
         android:icon="@drawable/view_agenda_48px"
         android:title="@string/agenda"/>
     <item
-        android:id="@+id/page_4"
+        android:id="@+id/profile_page"
         android:enabled="true"
         android:icon="@drawable/person_48px"
         android:title="@string/profile"/>
