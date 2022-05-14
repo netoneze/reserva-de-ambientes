@@ -14,11 +14,12 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     ScheduleFragment scheduleFragment = new ScheduleFragment();
     AgendaFragment agendaFragment = new AgendaFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, homeFragment, "").commit();
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -34,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.agenda_page:
                     Toast.makeText(MainActivity.this, "Agenda", Toast.LENGTH_SHORT).show();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, agendaFragment).commit();
-                    return true;
-                case R.id.profile_page:
-                    Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, profileFragment).commit();
                     return true;
             }
             return true;

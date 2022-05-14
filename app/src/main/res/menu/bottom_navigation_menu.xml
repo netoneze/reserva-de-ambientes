@@ -14,9 +14,4 @@
         android:enabled="true"
         android:icon="@drawable/view_agenda_48px"
         android:title="@string/agenda"/>
-    <item
-        android:id="@+id/profile_page"
-        android:enabled="true"
-        android:icon="@drawable/person_48px"
-        android:title="@string/profile"/>
 </menu>
