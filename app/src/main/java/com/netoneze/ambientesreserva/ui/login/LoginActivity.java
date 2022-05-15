@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,22 +24,36 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.netoneze.ambientesreserva.MainActivity;
 import com.netoneze.ambientesreserva.R;
-import com.netoneze.ambientesreserva.ScheduleActivity;
-import com.netoneze.ambientesreserva.ui.login.LoginViewModel;
-import com.netoneze.ambientesreserva.ui.login.LoginViewModelFactory;
+import com.netoneze.ambientesreserva.data.Result;
+import com.netoneze.ambientesreserva.data.model.LoggedInUser;
 import com.netoneze.ambientesreserva.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-    private MainActivity mainActivity = new MainActivity();
+    FirebaseUser user = null;
+
+    @Override
+    protected void onStart() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        super.onStart();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -118,13 +133,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
+        loginButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            mAuth.signInWithEmailAndPassword(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            user = mAuth.getCurrentUser();
+                            assert user != null;
+                            Log.i("login", "signInWithEmail:success" + user.getEmail());
+                            loadingProgressBar.setVisibility(View.GONE);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("login", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Login falhou!", Toast.LENGTH_SHORT).show();
+                            loadingProgressBar.setVisibility(View.GONE);
+                        }
+                    });
+
         });
     }
 
