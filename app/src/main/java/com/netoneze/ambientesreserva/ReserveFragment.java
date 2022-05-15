@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment} factory method to
+ * Use the {@link ReserveFragment} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class ReserveFragment extends Fragment {
 
-    public HomeFragment() {
+    public ReserveFragment() {
         // Required empty public constructor
     }
 
@@ -23,6 +23,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_reserve, container, false);
     }
 }
