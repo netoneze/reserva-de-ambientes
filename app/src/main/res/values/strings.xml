@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Reserva de Ambientes</string>
     <string name="management">Management</string>
-    <string name="agenda">Agenda</string>
+    <string name="my_reservations">My Reservations</string>
     <string name="name">Name</string>
     <string name="type">Type</string>
     <string name="department">Department</string>

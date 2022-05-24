@@ -8,7 +8,7 @@
         android:id="@+id/agenda_page"
         android:enabled="true"
         android:icon="@drawable/view_agenda_48px"
-        android:title="@string/agenda"/>
+        android:title="@string/my_reservations"/>
     <item
         android:id="@+id/management_page"
         android:enabled="true"

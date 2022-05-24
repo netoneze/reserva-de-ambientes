@@ -33,7 +33,7 @@ import com.netoneze.ambientesreserva.data.model.LoggedInUser;
 import com.netoneze.ambientesreserva.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-
+    public static final String TIPO = "TIPO";
     private FirebaseAuth mAuth;
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
@@ -145,6 +145,9 @@ public class LoginActivity extends AppCompatActivity {
                             Log.i("login", "signInWithEmail:success" + user.getEmail());
                             loadingProgressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            if (usernameEditText.getText().toString().contains("@alunos.utfpr.edu.br")) {
+                                intent.putExtra(TIPO, "Aluno");
+                            }
                             startActivity(intent);
                             setResult(Activity.RESULT_OK);
                             finish();
