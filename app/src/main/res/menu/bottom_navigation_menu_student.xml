@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/reserve_page"
+        android:enabled="true"
+        android:icon="@drawable/event_available_48px"
+        android:title="@string/reserve"/>
+    <item
+        android:id="@+id/agenda_page"
+        android:enabled="true"
+        android:icon="@drawable/view_agenda_48px"
+        android:title="@string/my_reservations"/>
+</menu>
