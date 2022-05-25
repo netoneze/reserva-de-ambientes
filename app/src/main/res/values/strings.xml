@@ -16,9 +16,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="reserve">Reserve</string>
-    <string name="room">Room</string>
+    <string name="room_select">Select a room</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="save">Save</string>
     <string name="clean">Clean</string>
+    <string name="room">Room</string>
 </resources>
