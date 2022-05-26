@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Login");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, reserveFragment, "").commit();
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);

@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -25,8 +30,12 @@ import java.util.Map;
 public class ReserveFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ViewGroup root;
     Spinner spinnerRooms;
+    Button buttonSave, buttonClean;
+    EditText editTextDate, editTextTime;
+
     public ReserveFragment() {
         // Required empty public constructor
     }
@@ -35,12 +44,47 @@ public class ReserveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reserve, container, false);
+
+        //Buttons
+        buttonSave = (Button) root.findViewById(R.id.buttonSave);
+        buttonClean = (Button) root.findViewById(R.id.buttonClean);
+
+        //Reserve fields
         spinnerRooms = (Spinner) root.findViewById(R.id.spinnerRoom);
+        editTextDate = (EditText) root.findViewById(R.id.editTextDate);
+        editTextTime = (EditText) root.findViewById(R.id.editTextTime);
+
+        buttonSave.setOnClickListener(v -> {
+            // Do something in response to button click
+            Toast.makeText(getActivity(), "Clicou em save", Toast.LENGTH_SHORT).show();
+            Map <String, Object> reserve = new HashMap<>();
+            reserve.put("date", editTextDate.getText().toString());
+            reserve.put("room", spinnerRooms.getSelectedItem().toString());
+            reserve.put("time", editTextTime.getText().toString());
+            reserve.put("userId", user.getUid());
+
+            db.collection("reservation")
+                    .add(reserve)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(getActivity(), "Salvou com o id" + documentReference.getId(), Toast.LENGTH_SHORT).show();
+                        cleanFields();
+                    })
+                    .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
+        });
+
+        buttonClean.setOnClickListener(v -> cleanFields());
+
         populaSpinner();
         return root;
     }
 
-    public void populaSpinner(){
+    public void cleanFields() {
+        editTextDate.setText(null);
+        editTextTime.setText(null);
+        spinnerRooms.setSelection(0);
+    }
+
+    public void populaSpinner() {
         ArrayList<String> lista = new ArrayList<>();
 
         db.collection("room")
