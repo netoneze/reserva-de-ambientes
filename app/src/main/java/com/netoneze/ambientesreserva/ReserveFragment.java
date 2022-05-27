@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ReserveFragment extends Fragment {
-
+    private Calendar calendarDataTarefa;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ViewGroup root;
@@ -56,7 +57,10 @@ public class ReserveFragment extends Fragment {
 
         buttonSave.setOnClickListener(v -> {
             // Do something in response to button click
-            Toast.makeText(getActivity(), "Clicou em save", Toast.LENGTH_SHORT).show();
+            if (spinnerRooms.getSelectedItemPosition() == 0){
+                Toast.makeText(getActivity(), "Select a room!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Map <String, Object> reserve = new HashMap<>();
             reserve.put("date", editTextDate.getText().toString());
             reserve.put("room", spinnerRooms.getSelectedItem().toString());
@@ -66,7 +70,7 @@ public class ReserveFragment extends Fragment {
             db.collection("reservation")
                     .add(reserve)
                     .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(getActivity(), "Salvou com o id" + documentReference.getId(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Saved room!", Toast.LENGTH_SHORT).show();
                         cleanFields();
                     })
                     .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
