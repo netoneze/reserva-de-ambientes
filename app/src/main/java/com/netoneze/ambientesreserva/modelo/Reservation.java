@@ -4,13 +4,15 @@ import java.util.Date;
 
 public class Reservation {
     private String date;
-    private String time;
+    private String startTime;
+    private String endTime;
     private String room;
     private String userId;
 
-    public Reservation(String date, String time, String room, String userId) {
+    public Reservation(String date, String startTime, String endTime, String room, String userId) {
         this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.room = room;
         this.userId = userId;
     }
@@ -27,12 +29,20 @@ public class Reservation {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getRoom() {

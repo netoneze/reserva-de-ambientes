@@ -32,56 +32,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tf_time"
+        android:id="@+id/tf_startTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/time"
+        android:text="@string/startTime"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tf_date" />
 
     <TextView
-        android:id="@+id/tf_time_body"
+        android:id="@+id/tf_startTime_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/time"
+        android:text="@string/startTime"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/tf_time"
+        app:layout_constraintStart_toEndOf="@+id/tf_startTime"
         app:layout_constraintTop_toBottomOf="@+id/tf_date_body" />
 
     <TextView
-        android:id="@+id/tf_details"
+        android:id="@+id/tf_endTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="27dp"
-        android:text="@string/details"
+        android:text="@string/endTime"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tf_time" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_startTime" />
 
     <TextView
-        android:id="@+id/tf_details_body"
+        android:id="@+id/tf_endTime_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/details"
+        android:text="@string/endTime"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/tf_details"
-        app:layout_constraintTop_toBottomOf="@+id/tf_time_body" />
+        app:layout_constraintStart_toEndOf="@+id/tf_endTime"
+        app:layout_constraintTop_toBottomOf="@+id/tf_startTime_body" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

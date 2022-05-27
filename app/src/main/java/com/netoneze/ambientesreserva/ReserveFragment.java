@@ -18,9 +18,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -35,7 +38,7 @@ public class ReserveFragment extends Fragment {
     ViewGroup root;
     Spinner spinnerRooms;
     Button buttonSave, buttonClean;
-    EditText editTextDate, editTextTime;
+    EditText editTextDate, editTextStartTime, editTextEndTime;
 
     public ReserveFragment() {
         // Required empty public constructor
@@ -53,7 +56,8 @@ public class ReserveFragment extends Fragment {
         //Reserve fields
         spinnerRooms = (Spinner) root.findViewById(R.id.spinnerRoom);
         editTextDate = (EditText) root.findViewById(R.id.editTextDate);
-        editTextTime = (EditText) root.findViewById(R.id.editTextTime);
+        editTextStartTime = (EditText) root.findViewById(R.id.editTextStartTime);
+        editTextEndTime = (EditText) root.findViewById(R.id.editTextEndTime);
 
         buttonSave.setOnClickListener(v -> {
             // Do something in response to button click
@@ -64,7 +68,8 @@ public class ReserveFragment extends Fragment {
             Map <String, Object> reserve = new HashMap<>();
             reserve.put("date", editTextDate.getText().toString());
             reserve.put("room", spinnerRooms.getSelectedItem().toString());
-            reserve.put("time", editTextTime.getText().toString());
+            reserve.put("startTime", editTextStartTime.getText().toString());
+            reserve.put("endTime", editTextEndTime.getText().toString());
             reserve.put("userId", user.getUid());
 
             db.collection("reservation")
@@ -84,7 +89,8 @@ public class ReserveFragment extends Fragment {
 
     public void cleanFields() {
         editTextDate.setText(null);
-        editTextTime.setText(null);
+        editTextStartTime.setText(null);
+        editTextEndTime.setText(null);
         spinnerRooms.setSelection(0);
     }
 

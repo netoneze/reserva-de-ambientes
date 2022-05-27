@@ -73,8 +73,11 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("date")) {
                                         reservation.setDate(entryMap2.getValue().toString());
                                     }
-                                    if (entryMap2.getKey().equals("time")) {
-                                        reservation.setTime(entryMap2.getValue().toString());
+                                    if (entryMap2.getKey().equals("startTime")) {
+                                        reservation.setStartTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("endTime")) {
+                                        reservation.setEndTime(entryMap2.getValue().toString());
                                     }
                                 }
                                 lista.add(reservation);
