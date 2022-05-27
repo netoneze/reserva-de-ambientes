@@ -61,6 +61,8 @@ public class ReserveFragment extends Fragment {
 
         buttonSave.setOnClickListener(v -> {
             // Do something in response to button click
+
+            //Validation
             if (spinnerRooms.getSelectedItemPosition() == 0){
                 Toast.makeText(getActivity(), "Select a room!", Toast.LENGTH_SHORT).show();
                 return;
@@ -72,6 +74,29 @@ public class ReserveFragment extends Fragment {
                 Toast.makeText(getActivity(), "Fill all the fields!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                Date todayDate = new Date();
+                Date reservationDate = sdf.parse(editTextDate.getText().toString());
+
+                assert reservationDate != null;
+                if (reservationDate.before(todayDate)) {
+                    Toast.makeText(getActivity(), "Incorrect date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (Integer.parseInt(editTextStartTime.getText().toString()) < 0) {
+                    Toast.makeText(getActivity(), "Incorrect StartTime", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (Integer.parseInt(editTextEndTime.getText().toString()) < 0) {
+                    Toast.makeText(getActivity(), "Incorrect EndTime", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             Map <String, Object> reserve = new HashMap<>();
             reserve.put("date", editTextDate.getText().toString());
             reserve.put("room", spinnerRooms.getSelectedItem().toString());
