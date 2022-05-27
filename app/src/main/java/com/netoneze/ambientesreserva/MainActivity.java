@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationBarView bottomNavigationView;
     ManagementFragment managementFragment = new ManagementFragment();
     ReserveFragment reserveFragment = new ReserveFragment();
-    AgendaFragment agendaFragment = new AgendaFragment();
+    MyReservationsFragment myReservationsFragment = new MyReservationsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.agenda_page:
                     Toast.makeText(MainActivity.this, "Agenda", Toast.LENGTH_SHORT).show();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, agendaFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment).commit();
                     return true;
                 case R.id.management_page:
                     Toast.makeText(MainActivity.this, "Schedule", Toast.LENGTH_SHORT).show();
