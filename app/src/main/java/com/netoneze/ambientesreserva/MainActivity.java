@@ -1,7 +1,6 @@
 package com.netoneze.ambientesreserva;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,15 +31,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.reserve_page:
-                    Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, reserveFragment, "").commit();
                     return true;
                 case R.id.agenda_page:
-                    Toast.makeText(MainActivity.this, "Agenda", Toast.LENGTH_SHORT).show();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment).commit();
                     return true;
                 case R.id.management_page:
-                    Toast.makeText(MainActivity.this, "Schedule", Toast.LENGTH_SHORT).show();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, managementFragment).commit();
                     return true;
             }

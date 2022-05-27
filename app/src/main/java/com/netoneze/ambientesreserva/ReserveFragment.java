@@ -65,6 +65,13 @@ public class ReserveFragment extends Fragment {
                 Toast.makeText(getActivity(), "Select a room!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (editTextDate.getText().toString().equals("") ||
+                editTextStartTime.getText().toString().equals("") ||
+                editTextEndTime.getText().toString().equals("")
+            ) {
+                Toast.makeText(getActivity(), "Fill all the fields!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Map <String, Object> reserve = new HashMap<>();
             reserve.put("date", editTextDate.getText().toString());
             reserve.put("room", spinnerRooms.getSelectedItem().toString());
