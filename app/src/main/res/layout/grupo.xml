@@ -9,12 +9,13 @@
         android:id="@+id/tf_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="8"
-        android:text="Grupo"
-        android:textColor="@android:color/black" />
+        android:text="@string/group"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
 </LinearLayout>

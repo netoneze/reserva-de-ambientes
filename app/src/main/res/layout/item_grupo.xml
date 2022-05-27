@@ -3,77 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="260dp"
+    android:layout_height="140dp"
     android:background="#ff9b999a">
 
     <TextView
-        android:id="@+id/tf_block"
+        android:id="@+id/tf_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/name"
+        android:text="@string/date"
         android:textColor="@android:color/white"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tf_block_body"
+        android:id="@+id/tf_date_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/name"
+        android:text="@string/date"
         android:textColor="@android:color/white"
-        app:layout_constraintStart_toEndOf="@+id/tf_block"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tf_date"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tf_type"
+        android:id="@+id/tf_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/type"
+        android:text="@string/time"
         android:textColor="@android:color/white"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tf_block" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_date" />
 
     <TextView
-        android:id="@+id/tf_type_body"
+        android:id="@+id/tf_time_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/type"
+        android:text="@string/time"
         android:textColor="@android:color/white"
-        app:layout_constraintStart_toEndOf="@+id/tf_type"
-        app:layout_constraintTop_toBottomOf="@+id/tf_block_body" />
-
-    <TextView
-        android:id="@+id/tf_departament"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/department"
-        android:textColor="@android:color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tf_type" />
-
-    <TextView
-        android:id="@+id/tf_departament_body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:gravity="end"
-        android:text="@string/department"
-        android:textColor="@android:color/white"
-        app:layout_constraintStart_toEndOf="@+id/tf_departament"
-        app:layout_constraintTop_toBottomOf="@+id/tf_type_body" />
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tf_time"
+        app:layout_constraintTop_toBottomOf="@+id/tf_date_body" />
 
     <TextView
         android:id="@+id/tf_details"
@@ -81,10 +62,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="27dp"
         android:text="@string/details"
         android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tf_departament" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_time" />
 
     <TextView
         android:id="@+id/tf_details_body"
@@ -95,8 +79,9 @@
         android:gravity="end"
         android:text="@string/details"
         android:textColor="@android:color/white"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tf_details"
-        app:layout_constraintTop_toBottomOf="@+id/tf_departament_body" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_time_body" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
