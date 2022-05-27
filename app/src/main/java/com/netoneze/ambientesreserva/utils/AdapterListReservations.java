@@ -8,17 +8,17 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.netoneze.ambientesreserva.R;
-import com.netoneze.ambientesreserva.modelo.Ambiente;
+import com.netoneze.ambientesreserva.modelo.Reservation;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class AdapterListSchedule extends BaseExpandableListAdapter {
+public class AdapterListReservations extends BaseExpandableListAdapter {
     private List<String> lstGrupos;
-    private HashMap<String, List<Ambiente>> lstItensGrupos;
+    private HashMap<String, List<Reservation>> lstItensGrupos;
     private Context context;
 
-    public AdapterListSchedule(Context context, List<String> grupos, HashMap<String, List<Ambiente>> itensGrupos) {
+    public AdapterListReservations(Context context, List<String> grupos, HashMap<String, List<Reservation>> itensGrupos) {
         // inicializa as variáveis da classe
         this.context = context;
         lstGrupos = grupos;
@@ -84,10 +84,9 @@ public class AdapterListSchedule extends BaseExpandableListAdapter {
 
         TextView tfTitulo = convertView.findViewById(R.id.tf_name);
 
-        Ambiente ambiente = (Ambiente) getChild(groupPosition, 0);
+        Reservation reservation = (Reservation) getChild(groupPosition, 0);
 
         tfTitulo.setText((String) getGroup(groupPosition));
-
 
         return convertView;
     }
@@ -102,16 +101,13 @@ public class AdapterListSchedule extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.item_grupo, null);
         }
 
-        TextView tfBlock = convertView.findViewById(R.id.tf_block_body);
-        TextView tfType = convertView.findViewById(R.id.tf_type_body);
-        TextView tfDepartment = convertView.findViewById(R.id.tf_departament_body);
+        TextView tfTime = convertView.findViewById(R.id.tf_time_body);
+        TextView tfDate = convertView.findViewById(R.id.tf_date_body);
         TextView tfDetails = convertView.findViewById(R.id.tf_details_body);
 
-        Ambiente ambiente = (Ambiente) getChild(groupPosition, childPosition);
-        tfBlock.setText(ambiente.getBlock());
-        tfType.setText(ambiente.getType());
-        tfDepartment.setText(ambiente.getDepartment());
-        tfDetails.setText(ambiente.getDetails());
+        Reservation reservation = (Reservation) getChild(groupPosition, childPosition);
+        tfDate.setText(reservation.getDate());
+        tfTime.setText(reservation.getTime());
 
         return convertView;
     }
