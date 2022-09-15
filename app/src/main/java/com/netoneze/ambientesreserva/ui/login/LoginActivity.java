@@ -17,15 +17,22 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.netoneze.ambientesreserva.MainActivity;
 import com.netoneze.ambientesreserva.databinding.ActivityLoginBinding;
+
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TIPO = "TIPO";
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     FirebaseUser user = null;
+    private FirebaseFirestore db1;
 
     @Override
     protected void onStart() {
@@ -98,6 +105,30 @@ public class LoginActivity extends AppCompatActivity {
                             Log.i("login", "signInWithEmail:success" + user.getEmail());
                             loadingProgressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                            final String[] username = new String[1];
+
+                            DocumentReference docRef = db.collection("user").document(user.getUid());
+                            docRef.get().addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    DocumentSnapshot document = task1.getResult();
+                                    if (document.exists()) {
+                                        Log.d("documentUserData", "DocumentSnapshot data: " + document.getData());
+                                        for (Map.Entry<String, Object> object : document.getData().entrySet()) {
+                                            if (object.getKey().equals("username")) {
+                                                Log.d("userData", object.getValue().toString());
+                                                username[0] = object.getValue().toString();
+                                                Log.d("userData2", username[0]);
+                                            }
+                                        }
+                                    } else {
+                                        Log.d("noDocumentError", "No such document");
+                                    }
+                                } else {
+                                    Log.d("failMessage", "get failed with ", task1.getException());
+                                }
+                            });
+
                             if (usernameEditText.getText().toString().contains("@alunos.utfpr.edu.br")) {
                                 intent.putExtra(TIPO, "Aluno");
                             }
