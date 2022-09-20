@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReservaDeAmbientes">
         <activity
+            android:name=".RoomFormActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login" >

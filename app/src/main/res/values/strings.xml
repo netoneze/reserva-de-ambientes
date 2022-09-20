@@ -26,4 +26,11 @@
     <string name="startTime">Start Time</string>
     <string name="endTime">End Time</string>
     <string name="addRoomButtonDescription">Add room button</string>
+    <string name="specifications">Specifications</string>
+    <string name="needsKey">Needs key</string>
+    <string name="hasAirConditioner">Has Air Conditioner</string>
+    <string name="hasEnabledNetworkPoint">Has Enabled Network Point</string>
+    <string name="hasProjector">Has Projector</string>
+    <string name="hasTV">Has TV</string>
+    <string name="CheckBoxAutomaticApproval">Automatic Approval</string>
 </resources>
