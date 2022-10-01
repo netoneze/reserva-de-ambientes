@@ -29,7 +29,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/type"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEndTime" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextRoomName" />
 
         <TextView
             android:id="@+id/textViewName3"
@@ -39,32 +39,32 @@
             android:layout_marginTop="30dp"
             android:text="@string/specifications"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEndTime2" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextRoomType" />
 
         <EditText
-            android:id="@+id/editTextEndTime"
+            android:id="@+id/editTextRoomName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="time"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
         <EditText
-            android:id="@+id/editTextEndTime2"
+            android:id="@+id/editTextRoomType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="time"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName2" />
 
         <Button
-            android:id="@+id/buttonSave"
+            android:id="@+id/buttonSaveRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -74,54 +74,14 @@
             app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
 
         <Button
-            android:id="@+id/buttonClean"
+            android:id="@+id/buttonCleanRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="30dp"
             android:text="@string/clean"
-            app:layout_constraintStart_toEndOf="@+id/buttonSave"
+            app:layout_constraintStart_toEndOf="@+id/buttonSaveRoom"
             app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewName3">
-
-            <RadioButton
-                android:id="@+id/radioButtonNeedsKey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/needsKey" />
-
-            <RadioButton
-                android:id="@+id/radioButtonHasAirConditioner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hasAirConditioner" />
-
-            <RadioButton
-                android:id="@+id/radioButtonHasEnabledNetworkPoint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hasEnabledNetworkPoint" />
-
-            <RadioButton
-                android:id="@+id/radioButtonHasProjector"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hasProjector" />
-
-            <RadioButton
-                android:id="@+id/radioButtonHasTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hasTV" />
-        </RadioGroup>
 
         <CheckBox
             android:id="@+id/automaticApproval"
@@ -131,7 +91,53 @@
             android:layout_marginTop="30dp"
             android:text="@string/CheckBoxAutomaticApproval"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasTV" />
+
+        <CheckBox
+            android:id="@+id/checkBoxNeedsKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/needsKey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName3" />
+
+        <CheckBox
+            android:id="@+id/checkBoxHasAirConditioner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/hasAirConditioner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxNeedsKey" />
+
+        <CheckBox
+            android:id="@+id/checkBoxHasNetworkPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/hasEnabledNetworkPoint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasAirConditioner" />
+
+        <CheckBox
+            android:id="@+id/checkBoxHasProjector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/hasProjector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasNetworkPoint" />
+
+        <CheckBox
+            android:id="@+id/checkBoxHasTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/hasTV"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasProjector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
