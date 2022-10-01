@@ -2,7 +2,6 @@ package com.netoneze.ambientesreserva;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,14 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.netoneze.ambientesreserva.modelo.Ambiente;
 import com.netoneze.ambientesreserva.modelo.Reservation;
 import com.netoneze.ambientesreserva.utils.AdapterListReservations;
 
@@ -46,7 +41,7 @@ public class MyReservationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations, container, false);
-        listView = (ExpandableListView) root.findViewById(R.id.listViewReservations);
+        listView = root.findViewById(R.id.listViewReservations);
         populaLista();
         return root;
     }
