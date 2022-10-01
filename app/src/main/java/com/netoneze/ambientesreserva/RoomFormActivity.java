@@ -43,11 +43,12 @@ public class RoomFormActivity extends AppCompatActivity {
         buttonClean = findViewById(R.id.buttonCleanRoom);
 
         buttonSave.setOnClickListener(v -> {
+            String roomName = nameEditText.getText().toString();
             Map<String, Object> room = new HashMap<>();
             Map<String, Boolean> especificacoes = new HashMap<>();
             room.put("aprovacaoAutomatica", chkAutomaticApproval.isChecked());
             room.put("type", typeEditText.getText().toString());
-            room.put("name", nameEditText.getText().toString());
+            room.put("name", roomName);
             room.put("responsibleUid", user.getUid());
             especificacoes.put("necessita_chave", chkBoxNeedsKey.isSelected());
             especificacoes.put("possui_ar_condicionado", chkBoxHasAirConditioner.isSelected());
@@ -56,8 +57,8 @@ public class RoomFormActivity extends AppCompatActivity {
             especificacoes.put("possui_tv", chxBoxHasTV.isSelected());
             room.put("especificacoes", especificacoes);
 
-            db.collection("room")
-                    .add(room)
+            db.collection("room").document(roomName)
+                    .set(room)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getApplicationContext(), "Saved room!", Toast.LENGTH_SHORT).show();
                         cleanFields();

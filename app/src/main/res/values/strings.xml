@@ -33,4 +33,10 @@
     <string name="hasProjector">Has Projector</string>
     <string name="hasTV">Has TV</string>
     <string name="CheckBoxAutomaticApproval">Automatic Approval</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="deseja_realmente_apagar">Are you sure you want to delete</string>
+    <string name= "yes">Yes</string>
+    <string name= "no">No</string>
+    <string name= "confirmation">Confirm</string>
 </resources>

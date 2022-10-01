@@ -1,17 +1,24 @@
 package com.netoneze.ambientesreserva;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +28,7 @@ import com.netoneze.ambientesreserva.modelo.Reservation;
 import com.netoneze.ambientesreserva.modelo.Room;
 import com.netoneze.ambientesreserva.utils.AdapterListReservations;
 import com.netoneze.ambientesreserva.utils.AdapterListRooms;
+import com.netoneze.ambientesreserva.utils.UtilsGUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +55,7 @@ public class ManagementFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_management, container, false);
         listView = root.findViewById(R.id.listViewRooms);
+        registerForContextMenu(listView);
         addRoomButton = root.findViewById(R.id.addRoomButton);
         addRoomButton.setOnClickListener(v -> {
             Intent addRoomIntent = new Intent(getActivity(), RoomFormActivity.class);
@@ -112,6 +121,89 @@ public class ManagementFragment extends Fragment {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }
                 });
+    }
+
+    private void delete(int posicao){
+        Room room = (Room) listView.getExpandableListAdapter().getChild(posicao, 0);
+
+        String mensagem = getString(R.string.deseja_realmente_apagar)
+                + "\n" + room.getName() + "?";
+
+        DialogInterface.OnClickListener listener =
+                (dialog, which) -> {
+
+                    switch(which){
+                        case DialogInterface.BUTTON_POSITIVE:
+
+                            db.collection("room").document(room.getName())
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("deleteFirestone", room.getName() + " DocumentSnapshot successfully deleted!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("deleteFirestone", "Error deleting document", e);
+                                        }
+                                    });
+
+                            populaLista();
+
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+
+                            break;
+                    }
+                };
+
+        UtilsGUI.confirmaAcao(getContext(), mensagem, listener);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ExpandableListView.ExpandableListContextMenuInfo info;
+        info = (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+
+        int groupPos = 0;
+
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+        {
+            groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+        }
+
+        switch(item.getItemId()){
+
+            case R.id.editar_menu_item_room:
+//                vaiParaTelaDeCadastroEditar(groupPos);
+                return true;
+
+            case R.id.excluir_menu_item_room:
+                delete(groupPos);
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+
+        ExpandableListView.ExpandableListContextMenuInfo info;
+
+        info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+            inflater.inflate(R.menu.menu_context_list_rooms, menu);
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
     }
 
 }
