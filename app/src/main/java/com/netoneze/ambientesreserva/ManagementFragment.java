@@ -1,5 +1,7 @@
 package com.netoneze.ambientesreserva;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -46,6 +49,9 @@ public class ManagementFragment extends Fragment {
     ViewGroup root;
     ExpandableListView listView;
     FloatingActionButton addRoomButton;
+    public static final String MODO = "MODO";
+    public static final String ROOM = "ROOM";
+    public static final int ALTERAR_CADASTRO = 1;
     public ManagementFragment() {
         // Required empty public constructor
     }
@@ -59,7 +65,7 @@ public class ManagementFragment extends Fragment {
         addRoomButton = root.findViewById(R.id.addRoomButton);
         addRoomButton.setOnClickListener(v -> {
             Intent addRoomIntent = new Intent(getActivity(), RoomFormActivity.class);
-            startActivity(addRoomIntent);
+            startActivityForResult(addRoomIntent, 0);
         });
         populaLista();
         return root;
@@ -81,9 +87,6 @@ public class ManagementFragment extends Fragment {
                                 Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
                                 for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
                                     Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
-                                    if (entryMap2.getKey().equals("details")) {
-                                        room.setDetails(entryMap2.getValue().toString());
-                                    }
                                     if (entryMap2.getKey().equals("name")) {
                                         room.setName(entryMap2.getValue().toString());
                                     }
@@ -162,6 +165,16 @@ public class ManagementFragment extends Fragment {
         UtilsGUI.confirmaAcao(getContext(), mensagem, listener);
     }
 
+    public void goToEditRoom(int posicao) {
+        Room room = (Room) listView.getExpandableListAdapter().getChild(posicao, 0);
+
+        Intent intentAlterarCadastro = new Intent(getActivity(), RoomFormActivity.class);
+
+        intentAlterarCadastro.putExtra(MODO, ALTERAR_CADASTRO);
+        intentAlterarCadastro.putExtra(ROOM, room);
+        startActivityForResult(intentAlterarCadastro, ALTERAR_CADASTRO);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         ExpandableListView.ExpandableListContextMenuInfo info;
@@ -178,7 +191,7 @@ public class ManagementFragment extends Fragment {
         switch(item.getItemId()){
 
             case R.id.editar_menu_item_room:
-//                vaiParaTelaDeCadastroEditar(groupPos);
+                goToEditRoom(groupPos);
                 return true;
 
             case R.id.excluir_menu_item_room:
@@ -206,4 +219,13 @@ public class ManagementFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK){
+            populaLista();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

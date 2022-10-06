@@ -1,18 +1,21 @@
 package com.netoneze.ambientesreserva.modelo;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.HashMap;
 import java.util.Map;
 
-public class Room {
+public class Room implements Parcelable {
     private Boolean automaticApproval;
-    private String details;
     private Map<String, Boolean> specifications;
     private String name;
     private String responsibleUid;
     private String type;
 
-    public Room(Boolean automaticApproval, String details, Map<String, Boolean> specifications, String name, String responsibleUid, String type) {
+    public Room(Boolean automaticApproval, Map<String, Boolean> specifications, String name, String responsibleUid, String type) {
         this.automaticApproval = automaticApproval;
-        this.details = details;
         this.specifications = specifications;
         this.name = name;
         this.responsibleUid = responsibleUid;
@@ -23,20 +26,23 @@ public class Room {
 
     }
 
+    Room(Parcel in){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            this.automaticApproval = in.readBoolean();
+        }
+        this.specifications = new HashMap<>();
+        in.readMap(specifications, Map.class.getClassLoader());
+        this.name = in.readString();
+        this.responsibleUid = in.readString();
+        this.type = in.readString();
+    }
+
     public Boolean getAutomaticApproval() {
         return automaticApproval;
     }
 
     public void setAutomaticApproval(Boolean automaticApproval) {
         this.automaticApproval = automaticApproval;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public Map<String, Boolean> getSpecifications() {
@@ -70,4 +76,32 @@ public class Room {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            parcel.writeBoolean(automaticApproval);
+        }
+        parcel.writeMap(specifications);
+        parcel.writeString(name);
+        parcel.writeString(responsibleUid);
+        parcel.writeString(type);
+    }
+    public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>(){
+
+        @Override
+        public Room createFromParcel(Parcel source) {
+            return new Room(source);
+        }
+
+        @Override
+        public Room[] newArray(int size) {
+            return new Room[size];
+        }
+    };
 }
