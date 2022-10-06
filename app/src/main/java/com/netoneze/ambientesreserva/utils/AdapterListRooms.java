@@ -103,12 +103,10 @@ public class AdapterListRooms extends BaseExpandableListAdapter {
         }
 
         TextView tfType = convertView.findViewById(R.id.tf_type_body);
-        TextView tfDetails = convertView.findViewById(R.id.tf_details_room_body);
         TextView tfSpecifications = convertView.findViewById(R.id.tf_specifications_room_body);
 
         Room room = (Room) getChild(groupPosition, childPosition);
         tfType.setText(room.getType());
-        tfDetails.setText(room.getDetails());
 
         Map<String, Boolean> specifications = room.getSpecifications();
         StringBuilder specificationsText = new StringBuilder();
@@ -116,19 +114,29 @@ public class AdapterListRooms extends BaseExpandableListAdapter {
         for (Map.Entry<String, Boolean> entry : specifications.entrySet()) {
             switch (entry.getKey()) {
                 case "necessita_chave":
-                    specificationsText.append(" Necessita chave,");
+                    if (entry.getValue()) {
+                        specificationsText.append(" Necessita chave,");
+                    }
                     break;
                 case "possui_ar_condicionado":
-                    specificationsText.append(" Possui ar-condicionado,");
+                    if (entry.getValue()) {
+                        specificationsText.append(" Possui ar-condicionado,");
+                    }
                     break;
                 case "possui_ponto_rede_habilitado":
-                    specificationsText.append(" Possui ponto de rede,");
+                    if (entry.getValue()) {
+                        specificationsText.append(" Possui ponto de rede,");
+                    }
                     break;
                 case "possui_projetor":
-                    specificationsText.append(" Possui projetor,");
+                    if (entry.getValue()) {
+                        specificationsText.append(" Possui projetor,");
+                    }
                     break;
                 case "possui_tv":
-                    specificationsText.append(" Possui TV,");
+                    if (entry.getValue()) {
+                        specificationsText.append(" Possui TV,");
+                    }
                     break;
                 default:
                     break;
