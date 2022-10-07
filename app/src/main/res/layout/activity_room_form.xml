@@ -39,7 +39,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/specifications"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextRoomType" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerRoomType" />
 
         <EditText
             android:id="@+id/editTextRoomName"
@@ -51,17 +51,6 @@
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName" />
-
-        <EditText
-            android:id="@+id/editTextRoomType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:inputType="text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewName2" />
 
         <Button
             android:id="@+id/buttonSaveRoom"
@@ -138,6 +127,15 @@
             android:text="@string/hasTV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxHasProjector" />
+
+        <Spinner
+            android:id="@+id/spinnerRoomType"
+            android:layout_width="332dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
