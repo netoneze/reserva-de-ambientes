@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,6 +30,8 @@ public class RoomFormActivity extends AppCompatActivity {
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText nameEditText;
     private Spinner typeSpinner;
+    private RadioGroup responsibleRadioGroup;
+    private RadioButton responsibleRadioButtonNo, responsibleRadioButtonYes;
     private CheckBox chkBoxNeedsKey, chkBoxHasAirConditioner, chkBoxHasNetworkPoint, chxBoxHasProjector, chxBoxHasTV, chkAutomaticApproval;
 
     @Override
@@ -47,9 +51,14 @@ public class RoomFormActivity extends AppCompatActivity {
         chxBoxHasProjector = findViewById(R.id.checkBoxHasProjector);
         chxBoxHasTV = findViewById(R.id.checkBoxHasTV);
         chkAutomaticApproval = findViewById(R.id.automaticApproval);
+        responsibleRadioGroup = findViewById(R.id.radioGroupResponsibleRoom);
+        responsibleRadioButtonNo = findViewById(R.id.radioButtonResponsibleNo);
+        responsibleRadioButtonYes = findViewById(R.id.radioButtonResponsibleYes);
 
         Button buttonSave = findViewById(R.id.buttonSaveRoom);
         Button buttonClean = findViewById(R.id.buttonCleanRoom);
+
+        responsibleRadioButtonNo.setChecked(true);
 
         buttonSave.setOnClickListener(v -> {
             //Validation
@@ -68,7 +77,11 @@ public class RoomFormActivity extends AppCompatActivity {
             room.put("aprovacaoAutomatica", chkAutomaticApproval.isChecked());
             room.put("type", typeSpinner.getSelectedItem().toString());
             room.put("name", roomName);
-            room.put("responsibleUid", user.getUid());
+            if (responsibleRadioGroup.getCheckedRadioButtonId() == R.id.radioButtonResponsibleYes) {
+                room.put("responsibleUid", user.getUid());
+            } else {
+                room.put("responsibleUid", "");
+            }
             especificacoes.put("necessita_chave", chkBoxNeedsKey.isChecked());
             especificacoes.put("possui_ar_condicionado", chkBoxHasAirConditioner.isChecked());
             especificacoes.put("possui_ponto_rede_habilitado", chkBoxHasNetworkPoint.isChecked());
@@ -110,6 +123,10 @@ public class RoomFormActivity extends AppCompatActivity {
                     break;
             }
             chkAutomaticApproval.setChecked(room.getAutomaticApproval());
+
+            if (room.getResponsibleUid().equals(user.getUid())) {
+                responsibleRadioButtonYes.setChecked(true);
+            }
 
             for(Map.Entry<String, Boolean> entry : roomSpecifications.entrySet()) {
                 switch (entry.getKey()) {
@@ -168,6 +185,7 @@ public class RoomFormActivity extends AppCompatActivity {
         chxBoxHasProjector.setChecked(false);
         chxBoxHasTV.setChecked(false);
         chkAutomaticApproval.setChecked(false);
+        responsibleRadioButtonNo.setChecked(true);
         Toast.makeText(getApplicationContext(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
     }
 }

@@ -60,17 +60,17 @@
             android:layout_marginTop="30dp"
             android:text="@string/save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupResponsibleRoom" />
 
         <Button
             android:id="@+id/buttonCleanRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="30dp"
             android:text="@string/clean"
             app:layout_constraintStart_toEndOf="@+id/buttonSaveRoom"
-            app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupResponsibleRoom" />
 
         <CheckBox
             android:id="@+id/automaticApproval"
@@ -136,6 +136,38 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName2" />
+
+        <TextView
+            android:id="@+id/textViewName4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/responsible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupResponsibleRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName4">
+
+            <RadioButton
+                android:id="@+id/radioButtonResponsibleYes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/radioButtonResponsibleNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

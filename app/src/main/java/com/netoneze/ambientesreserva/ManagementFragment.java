@@ -99,6 +99,9 @@ public class ManagementFragment extends Fragment {
                                     if (entryMap2.getKey().equals("especificacoes")) {
                                         room.setSpecifications((Map<String, Boolean>) entryMap2.getValue());
                                     }
+                                    if (entryMap2.getKey().equals("responsibleUid")) {
+                                        room.setResponsibleUid(entryMap2.getValue().toString());
+                                    }
                                 }
                                 lista.add(room);
                             }

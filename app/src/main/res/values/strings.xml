@@ -39,4 +39,5 @@
     <string name= "yes">Yes</string>
     <string name= "no">No</string>
     <string name= "confirmation">Confirm</string>
+    <string name="responsible">Are you the responsible?</string>
 </resources>
