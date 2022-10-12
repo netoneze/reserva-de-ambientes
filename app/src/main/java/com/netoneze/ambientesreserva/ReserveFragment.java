@@ -41,7 +41,7 @@ public class ReserveFragment extends Fragment {
     Spinner spinnerRooms;
     Button buttonSave, buttonClean;
     EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
-    Date myReservationDateStartTime, myReservationDateEndTime;
+    Date myReservationDateStartTime, myReservationDateEndTime, myReservationDateStartTimeLimit, myReservationDateEndTimeLimit;
     public ReserveFragment() {
         // Required empty public constructor
     }
@@ -176,6 +176,24 @@ public class ReserveFragment extends Fragment {
                 myReservationDateEndTime = sdfTime.parse(editTextDate.getText().toString() +
                         " " +
                         editTextEndTime.getText().toString());
+
+                myReservationDateStartTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "7:00");
+                myReservationDateEndTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "23:00");
+
+                if (myReservationDateStartTime.before(myReservationDateStartTimeLimit)) {
+                    Toast.makeText(getActivity(), "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (myReservationDateEndTime.after(myReservationDateEndTimeLimit)) {
+                    Toast.makeText(getActivity(), "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                assert myReservationDateEndTime != null;
+                if (myReservationDateEndTime.before(myReservationDateStartTime)) {
+                    Toast.makeText(getActivity(), "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
