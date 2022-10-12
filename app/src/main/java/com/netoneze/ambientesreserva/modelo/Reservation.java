@@ -1,16 +1,16 @@
 package com.netoneze.ambientesreserva.modelo;
 
-import java.util.Date;
-
 public class Reservation {
     private String date;
+    private String purpose;
     private String startTime;
     private String endTime;
     private String room;
     private String userId;
 
-    public Reservation(String date, String startTime, String endTime, String room, String userId) {
+    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userId) {
         this.date = date;
+        this.purpose = purpose;
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
@@ -19,6 +19,14 @@ public class Reservation {
 
     public Reservation() {
 
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
     public String getDate() {

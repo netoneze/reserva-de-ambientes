@@ -104,11 +104,14 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
         TextView tfDate = convertView.findViewById(R.id.tf_date_body);
         TextView tfStartTime = convertView.findViewById(R.id.tf_startTime_body);
         TextView tfEndTime = convertView.findViewById(R.id.tf_endTime_body);
+        TextView tfPurpose = convertView.findViewById(R.id.tf_purpose_body);
 
         Reservation reservation = (Reservation) getChild(groupPosition, childPosition);
+
         tfDate.setText(reservation.getDate());
         tfStartTime.setText(reservation.getStartTime());
         tfEndTime.setText(reservation.getEndTime());
+        tfPurpose.setText(reservation.getPurpose());
 
         return convertView;
     }

@@ -38,7 +38,7 @@ public class ReserveFragment extends Fragment {
     ViewGroup root;
     Spinner spinnerRooms;
     Button buttonSave, buttonClean;
-    EditText editTextDate, editTextStartTime, editTextEndTime;
+    EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
 
     public ReserveFragment() {
         // Required empty public constructor
@@ -58,6 +58,7 @@ public class ReserveFragment extends Fragment {
         editTextDate = (EditText) root.findViewById(R.id.editTextDate);
         editTextStartTime = (EditText) root.findViewById(R.id.editTextStartTime);
         editTextEndTime = (EditText) root.findViewById(R.id.editTextEndTime);
+        editTextPurpose = (EditText) root.findViewById(R.id.editTextPurpose);
 
         buttonSave.setOnClickListener(v -> {
             // Do something in response to button click
@@ -69,7 +70,8 @@ public class ReserveFragment extends Fragment {
             }
             if (editTextDate.getText().toString().equals("") ||
                 editTextStartTime.getText().toString().equals("") ||
-                editTextEndTime.getText().toString().equals("")
+                editTextEndTime.getText().toString().equals("") ||
+                editTextPurpose.getText().toString().equals("")
             ) {
                 Toast.makeText(getActivity(), "Fill all the fields!", Toast.LENGTH_SHORT).show();
                 return;
@@ -103,11 +105,12 @@ public class ReserveFragment extends Fragment {
             reserve.put("startTime", editTextStartTime.getText().toString());
             reserve.put("endTime", editTextEndTime.getText().toString());
             reserve.put("userId", user.getUid());
+            reserve.put("purpose", editTextPurpose.getText().toString());
 
             db.collection("reservation")
                     .add(reserve)
                     .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(getActivity(), "Saved room!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Saved reserve!", Toast.LENGTH_SHORT).show();
                         cleanFields();
                     })
                     .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
@@ -120,9 +123,10 @@ public class ReserveFragment extends Fragment {
     }
 
     public void cleanFields() {
-        editTextDate.setText(null);
-        editTextStartTime.setText(null);
-        editTextEndTime.setText(null);
+        editTextDate.setText("");
+        editTextStartTime.setText("");
+        editTextEndTime.setText("");
+        editTextPurpose.setText("");
         spinnerRooms.setSelection(0);
     }
 

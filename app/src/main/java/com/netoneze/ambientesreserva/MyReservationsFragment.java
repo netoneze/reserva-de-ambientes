@@ -74,6 +74,9 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("endTime")) {
                                         reservation.setEndTime(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("purpose")) {
+                                        reservation.setPurpose(entryMap2.getValue().toString());
+                                    }
                                 }
                                 lista.add(reservation);
                             }
