@@ -1,5 +1,7 @@
 package com.netoneze.ambientesreserva;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,9 @@ public class ReserveFragment extends Fragment {
     Button buttonSave, buttonClean;
     EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
     Date myReservationDateStartTime, myReservationDateEndTime, myReservationDateStartTimeLimit, myReservationDateEndTimeLimit;
+    Calendar myCalendarDate = Calendar.getInstance();
+    Calendar myCalendarTime = Calendar.getInstance();
+
     public ReserveFragment() {
         // Required empty public constructor
     }
@@ -62,9 +67,35 @@ public class ReserveFragment extends Fragment {
         editTextEndTime = (EditText) root.findViewById(R.id.editTextEndTime);
         editTextPurpose = (EditText) root.findViewById(R.id.editTextPurpose);
 
-        buttonSave.setOnClickListener(v -> {
-            // Do something in response to button click
+        TimePickerDialog.OnTimeSetListener startTimeListener = (view, hour, minute) -> {
+            myCalendarTime.set(Calendar.HOUR_OF_DAY, hour);
+            myCalendarTime.set(Calendar.MINUTE, minute);
+            updateStartTimeLabel();
+        };
 
+        TimePickerDialog.OnTimeSetListener endTimeListener = (view, hour, minute) -> {
+            myCalendarTime.set(Calendar.HOUR_OF_DAY, hour);
+            myCalendarTime.set(Calendar.MINUTE, minute);
+            updateEndTimeLabel();
+        };
+
+        editTextStartTime.setOnClickListener(v -> new TimePickerDialog(getContext(), startTimeListener, myCalendarTime
+                .get(Calendar.HOUR_OF_DAY), myCalendarTime.get(Calendar.MINUTE), true).show());
+        editTextEndTime.setOnClickListener(v -> new TimePickerDialog(getContext(), endTimeListener, myCalendarTime
+                .get(Calendar.HOUR_OF_DAY), myCalendarTime.get(Calendar.MINUTE), true).show());
+
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendarDate.set(Calendar.YEAR, year);
+            myCalendarDate.set(Calendar.MONTH, monthOfYear);
+            myCalendarDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDateLabel();
+        };
+
+        editTextDate.setOnClickListener(v -> new DatePickerDialog(getContext(), date, myCalendarDate
+                .get(Calendar.YEAR), myCalendarDate.get(Calendar.MONTH),
+                myCalendarDate.get(Calendar.DAY_OF_MONTH)).show());
+
+        buttonSave.setOnClickListener(v -> {
             //Validation
             if (spinnerRooms.getSelectedItemPosition() == 0){
                 Toast.makeText(getActivity(), "Select a room!", Toast.LENGTH_SHORT).show();
@@ -79,9 +110,9 @@ public class ReserveFragment extends Fragment {
                 return;
             }
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
                 Date todayDate = new Date();
-                Date reservationDate = sdf.parse(editTextDate.getText().toString());
+                Date reservationDate = sdf.parse(editTextDate.getText().toString() + " " + editTextStartTime.getText().toString());
 
                 assert reservationDate != null;
                 if (reservationDate.before(todayDate)) {
@@ -157,6 +188,27 @@ public class ReserveFragment extends Fragment {
         return root;
     }
 
+    private void updateDateLabel() {
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt","BR"));
+
+        editTextDate.setText(sdf.format(myCalendarDate.getTime()));
+    }
+
+    private void updateStartTimeLabel() {
+        String myFormat = "HH:mm"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt","BR"));
+
+        editTextStartTime.setText(sdf.format(myCalendarTime.getTime()));
+    }
+
+    private void updateEndTimeLabel() {
+        String myFormat = "HH:mm"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt","BR"));
+
+        editTextEndTime.setText(sdf.format(myCalendarTime.getTime()));
+    }
+
     public void cleanFields() {
         editTextDate.setText("");
         editTextStartTime.setText("");
@@ -167,36 +219,38 @@ public class ReserveFragment extends Fragment {
 
     public void verifyReserveTime(List<Reservation> lista, Map <String, Object> reserve) {
         boolean saveReservation = true;
-        if (!lista.isEmpty()) {
-            SimpleDateFormat sdfTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
-            try {
-                myReservationDateStartTime = sdfTime.parse(editTextDate.getText().toString() +
-                        " " +
-                        editTextStartTime.getText().toString());
-                myReservationDateEndTime = sdfTime.parse(editTextDate.getText().toString() +
-                        " " +
-                        editTextEndTime.getText().toString());
 
-                myReservationDateStartTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "7:00");
-                myReservationDateEndTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "23:00");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
 
-                if (myReservationDateStartTime.before(myReservationDateStartTimeLimit)) {
-                    Toast.makeText(getActivity(), "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (myReservationDateEndTime.after(myReservationDateEndTimeLimit)) {
-                    Toast.makeText(getActivity(), "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        try {
+            myReservationDateStartTime = sdfTime.parse(editTextDate.getText().toString() +
+                    " " +
+                    editTextStartTime.getText().toString());
+            myReservationDateEndTime = sdfTime.parse(editTextDate.getText().toString() +
+                    " " +
+                    editTextEndTime.getText().toString());
 
-                assert myReservationDateEndTime != null;
-                if (myReservationDateEndTime.before(myReservationDateStartTime)) {
-                    Toast.makeText(getActivity(), "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            myReservationDateStartTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "7:00");
+            myReservationDateEndTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "23:00");
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (myReservationDateStartTime.before(myReservationDateStartTimeLimit)) {
+                Toast.makeText(getActivity(), "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (myReservationDateEndTime.after(myReservationDateEndTimeLimit)) {
+                Toast.makeText(getActivity(), "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            assert myReservationDateEndTime != null;
+            if (myReservationDateEndTime.before(myReservationDateStartTime)) {
+                Toast.makeText(getActivity(), "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!lista.isEmpty()) {
             for (Reservation reserveItem : lista) {
                 try {
                     Date listReservationDateStartTime = sdfTime.parse(reserveItem.getDate() +

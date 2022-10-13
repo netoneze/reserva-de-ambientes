@@ -70,6 +70,10 @@
             android:ems="10"
             android:inputType="date"
             app:layout_constraintStart_toStartOf="parent"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
         <TextView
@@ -91,6 +95,10 @@
             android:ems="10"
             android:inputType="time"
             app:layout_constraintStart_toStartOf="parent"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@+id/textViewTime" />
 
         <TextView
@@ -112,6 +120,10 @@
             android:ems="10"
             android:inputType="time"
             app:layout_constraintStart_toStartOf="parent"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@+id/textViewTime2" />
 
         <Button
