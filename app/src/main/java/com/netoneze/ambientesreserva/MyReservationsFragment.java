@@ -77,6 +77,7 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("purpose")) {
                                         reservation.setPurpose(entryMap2.getValue().toString());
                                     }
+                                    reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
                             }
@@ -85,7 +86,7 @@ public class MyReservationsFragment extends Fragment {
                         List<String> lstGrupos = new ArrayList<>();
 
                         for (int i = 0 ; i < lista.size() ; i++){
-                            lstGrupos.add(lista.get(i).getRoom());
+                            lstGrupos.add(lista.get(i).getDocumentId());
                         }
 
                         HashMap<String, List<Reservation>> lstItensGrupo = new HashMap<>();

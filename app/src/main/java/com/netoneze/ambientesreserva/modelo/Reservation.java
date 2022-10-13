@@ -7,18 +7,28 @@ public class Reservation {
     private String endTime;
     private String room;
     private String userId;
+    private String documentId;
 
-    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userId) {
+    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userId, String documentId) {
         this.date = date;
         this.purpose = purpose;
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
         this.userId = userId;
+        this.documentId = documentId;
     }
 
     public Reservation() {
 
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getPurpose() {

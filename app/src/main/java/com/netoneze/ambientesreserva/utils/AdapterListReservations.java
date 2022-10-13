@@ -86,7 +86,7 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
 
         Reservation reservation = (Reservation) getChild(groupPosition, 0);
 
-        tfTitulo.setText((String) getGroup(groupPosition));
+        tfTitulo.setText(reservation.getRoom());
 
         return convertView;
     }
