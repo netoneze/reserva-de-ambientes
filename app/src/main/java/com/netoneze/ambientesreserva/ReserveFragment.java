@@ -36,7 +36,6 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ReserveFragment extends Fragment {
-    private Calendar calendarDataTarefa;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ViewGroup root;
