@@ -41,6 +41,7 @@ public class MyReservationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations, container, false);
+        getActivity().setTitle("My Reservations");
         listView = root.findViewById(R.id.listViewReservations);
         populaLista();
         return root;

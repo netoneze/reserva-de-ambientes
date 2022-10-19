@@ -55,6 +55,7 @@ public class ReserveFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reserve, container, false);
 
+        getActivity().setTitle("Create a Reservation");
         //Buttons
         buttonSave = (Button) root.findViewById(R.id.buttonSave);
         buttonClean = (Button) root.findViewById(R.id.buttonClean);
@@ -214,6 +215,7 @@ public class ReserveFragment extends Fragment {
         editTextEndTime.setText("");
         editTextPurpose.setText("");
         spinnerRooms.setSelection(0);
+        Toast.makeText(getActivity(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
     }
 
     public void verifyReserveTime(List<Reservation> lista, Map <String, Object> reserve) {

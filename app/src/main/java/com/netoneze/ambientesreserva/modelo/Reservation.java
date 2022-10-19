@@ -6,16 +6,16 @@ public class Reservation {
     private String startTime;
     private String endTime;
     private String room;
-    private String userId;
+    private String userName;
     private String documentId;
 
-    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userId, String documentId) {
+    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userName, String documentId) {
         this.date = date;
         this.purpose = purpose;
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        this.userId = userId;
+        this.userName = userName;
         this.documentId = documentId;
     }
 
@@ -71,11 +71,11 @@ public class Reservation {
         this.room = room;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserName(String userId) {
+        this.userName = userId;
     }
 }

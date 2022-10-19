@@ -40,6 +40,7 @@ public class RoomFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_room_form);
         Bundle bundle = getIntent().getExtras();
 
+        setTitle("Create a Room");
         nameEditText = findViewById(R.id.editTextRoomName);
         typeSpinner = (Spinner) findViewById(R.id.spinnerRoomType);
 

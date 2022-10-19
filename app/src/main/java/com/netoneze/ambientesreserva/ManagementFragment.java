@@ -61,6 +61,7 @@ public class ManagementFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_management, container, false);
         listView = root.findViewById(R.id.listViewRooms);
+        getActivity().setTitle("Room Management");
         registerForContextMenu(listView);
         addRoomButton = root.findViewById(R.id.addRoomButton);
         addRoomButton.setOnClickListener(v -> {

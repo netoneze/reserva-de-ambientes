@@ -32,49 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     FirebaseUser user = null;
-    private FirebaseFirestore db1;
     final String[] username = new String[1];
     final Long[] userType = new Long[1];
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            DocumentReference docRef = db.collection("user").document(currentUser.getUid());
-            docRef.get().addOnCompleteListener(task1 -> {
-                if (task1.isSuccessful()) {
-                    DocumentSnapshot document = task1.getResult();
-                    if (document.exists()) {
-                        Log.d("documentUserData", "DocumentSnapshot data: " + document.getData());
-                        for (Map.Entry<String, Object> object : document.getData().entrySet()) {
-                            if (object.getKey().equals("username")) {
-                                Log.d("userData", object.getValue().toString());
-                                username[0] = object.getValue().toString();
-                                Log.d("userData2", username[0]);
-                            }
-                            if (object.getKey().equals("type")) {
-                                if ( (Long) object.getValue() == 0) {
-                                    intent.putExtra(TIPO, "Aluno");
-                                }
-                                Log.d("userType", object.getValue().toString());
-                                userType[0] = (Long) object.getValue();
-                            }
-                        }
-
-                        startActivity(intent);
-                        setResult(Activity.RESULT_OK);
-                        finish();
-                    } else {
-                        Log.d("noDocumentError", "No such document");
-                    }
-                } else {
-                    Log.d("failMessage", "get failed with ", task1.getException());
-                }
-            });
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle("Login");
+        setTitle("Ambient Reservation");
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
@@ -125,6 +84,44 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            DocumentReference docRef = db.collection("user").document(currentUser.getUid());
+            docRef.get().addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
+                    DocumentSnapshot document = task1.getResult();
+                    if (document.exists()) {
+                        Log.d("documentUserData", "DocumentSnapshot data: " + document.getData());
+                        for (Map.Entry<String, Object> object : document.getData().entrySet()) {
+                            if (object.getKey().equals("username")) {
+                                Log.d("userData", object.getValue().toString());
+                                username[0] = object.getValue().toString();
+                                Log.d("userData2", username[0]);
+                            }
+                            if (object.getKey().equals("type")) {
+                                if ( (Long) object.getValue() == 0) {
+                                    intent.putExtra(TIPO, "Aluno");
+                                }
+                                Log.d("userType", object.getValue().toString());
+                                userType[0] = (Long) object.getValue();
+                            }
+                        }
+
+                        startActivity(intent);
+                        setResult(Activity.RESULT_OK);
+                        loadingProgressBar.setVisibility(View.GONE);
+                    } else {
+                        Log.d("noDocumentError", "No such document");
+                    }
+                } else {
+                    loadingProgressBar.setVisibility(View.GONE);
+                    Log.d("failMessage", "get failed with ", task1.getException());
+                }
+            });
+        }
+
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(usernameEditText.getText().toString(),
@@ -160,7 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                                         loadingProgressBar.setVisibility(View.GONE);
                                         startActivity(intent);
                                         setResult(Activity.RESULT_OK);
-                                        finish();
+                                        passwordEditText.setText("");
+                                        usernameEditText.setText("");
                                     } else {
                                         Log.d("noDocumentError", "No such document");
                                     }
