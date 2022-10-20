@@ -17,7 +17,6 @@ import com.netoneze.ambientesreserva.ui.login.LoginActivity;
 public class MainActivity extends AppCompatActivity {
     NavigationBarView bottomNavigationView;
     ManagementFragment managementFragment = new ManagementFragment();
-    ReserveFragment reserveFragment = new ReserveFragment();
     MyReservationsFragment myReservationsFragment = new MyReservationsFragment();
 
     @Override
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Ambient Reservation");
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, reserveFragment, "").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment, "").commit();
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         Bundle bundle = getIntent().getExtras();
@@ -37,10 +36,7 @@ public class MainActivity extends AppCompatActivity {
         }
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.reserve_page:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, reserveFragment, "").commit();
-                    return true;
-                case R.id.agenda_page:
+                case R.id.my_reserve:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment).commit();
                     return true;
                 case R.id.management_page:

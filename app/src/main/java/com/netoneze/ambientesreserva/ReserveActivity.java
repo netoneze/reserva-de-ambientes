@@ -1,11 +1,12 @@
 package com.netoneze.ambientesreserva;
 
+
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,15 +31,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReserveFragment} factory method to
- * create an instance of this fragment.
- */
-public class ReserveFragment extends Fragment {
+public class ReserveActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    ViewGroup root;
     Spinner spinnerRooms;
     Button buttonSave, buttonClean;
     EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
@@ -46,26 +41,21 @@ public class ReserveFragment extends Fragment {
     Calendar myCalendarDate = Calendar.getInstance();
     Calendar myCalendarTime = Calendar.getInstance();
 
-    public ReserveFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        root = (ViewGroup) inflater.inflate(R.layout.fragment_reserve, container, false);
-
-        getActivity().setTitle("Create a Reservation");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reserve);
+        setTitle("Create a Reservation");
         //Buttons
-        buttonSave = (Button) root.findViewById(R.id.buttonSave);
-        buttonClean = (Button) root.findViewById(R.id.buttonClean);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonClean = findViewById(R.id.buttonClean);
 
         //Reserve fields
-        spinnerRooms = (Spinner) root.findViewById(R.id.spinnerRoom);
-        editTextDate = (EditText) root.findViewById(R.id.editTextDate);
-        editTextStartTime = (EditText) root.findViewById(R.id.editTextStartTime);
-        editTextEndTime = (EditText) root.findViewById(R.id.editTextEndTime);
-        editTextPurpose = (EditText) root.findViewById(R.id.editTextPurpose);
+        spinnerRooms = findViewById(R.id.spinnerRoom);
+        editTextDate = findViewById(R.id.editTextDate);
+        editTextStartTime = findViewById(R.id.editTextStartTime);
+        editTextEndTime = findViewById(R.id.editTextEndTime);
+        editTextPurpose = findViewById(R.id.editTextPurpose);
 
         TimePickerDialog.OnTimeSetListener startTimeListener = (view, hour, minute) -> {
             myCalendarTime.set(Calendar.HOUR_OF_DAY, hour);
@@ -79,9 +69,9 @@ public class ReserveFragment extends Fragment {
             updateEndTimeLabel();
         };
 
-        editTextStartTime.setOnClickListener(v -> new TimePickerDialog(getContext(), startTimeListener, myCalendarTime
+        editTextStartTime.setOnClickListener(v -> new TimePickerDialog(this, startTimeListener, myCalendarTime
                 .get(Calendar.HOUR_OF_DAY), myCalendarTime.get(Calendar.MINUTE), true).show());
-        editTextEndTime.setOnClickListener(v -> new TimePickerDialog(getContext(), endTimeListener, myCalendarTime
+        editTextEndTime.setOnClickListener(v -> new TimePickerDialog(this, endTimeListener, myCalendarTime
                 .get(Calendar.HOUR_OF_DAY), myCalendarTime.get(Calendar.MINUTE), true).show());
 
         DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
@@ -91,22 +81,22 @@ public class ReserveFragment extends Fragment {
             updateDateLabel();
         };
 
-        editTextDate.setOnClickListener(v -> new DatePickerDialog(getContext(), date, myCalendarDate
+        editTextDate.setOnClickListener(v -> new DatePickerDialog(this, date, myCalendarDate
                 .get(Calendar.YEAR), myCalendarDate.get(Calendar.MONTH),
                 myCalendarDate.get(Calendar.DAY_OF_MONTH)).show());
 
         buttonSave.setOnClickListener(v -> {
             //Validation
-            if (spinnerRooms.getSelectedItemPosition() == 0){
-                Toast.makeText(getActivity(), "Select a room!", Toast.LENGTH_SHORT).show();
+            if (spinnerRooms.getSelectedItemPosition() == 0) {
+                Toast.makeText(this, "Select a room!", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (editTextDate.getText().toString().equals("") ||
-                editTextStartTime.getText().toString().equals("") ||
-                editTextEndTime.getText().toString().equals("") ||
-                editTextPurpose.getText().toString().equals("")
+                    editTextStartTime.getText().toString().equals("") ||
+                    editTextEndTime.getText().toString().equals("") ||
+                    editTextPurpose.getText().toString().equals("")
             ) {
-                Toast.makeText(getActivity(), "Fill all the fields!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Fill all the fields!", Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
@@ -116,15 +106,15 @@ public class ReserveFragment extends Fragment {
 
                 assert reservationDate != null;
                 if (reservationDate.before(todayDate)) {
-                    Toast.makeText(getActivity(), "Incorrect date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Incorrect date", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Integer.parseInt(editTextStartTime.getText().toString()) < 0) {
-                    Toast.makeText(getActivity(), "Incorrect StartTime", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Incorrect StartTime", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Integer.parseInt(editTextEndTime.getText().toString()) < 0) {
-                    Toast.makeText(getActivity(), "Incorrect EndTime", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Incorrect EndTime", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -132,7 +122,7 @@ public class ReserveFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Map <String, Object> reserve = new HashMap<>();
+            Map<String, Object> reserve = new HashMap<>();
             reserve.put("date", editTextDate.getText().toString());
             reserve.put("room", spinnerRooms.getSelectedItem().toString());
             reserve.put("startTime", editTextStartTime.getText().toString());
@@ -185,7 +175,6 @@ public class ReserveFragment extends Fragment {
         buttonClean.setOnClickListener(v -> cleanFields());
 
         populaSpinner();
-        return root;
     }
 
     private void updateDateLabel() {
@@ -215,7 +204,7 @@ public class ReserveFragment extends Fragment {
         editTextEndTime.setText("");
         editTextPurpose.setText("");
         spinnerRooms.setSelection(0);
-        Toast.makeText(getActivity(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Cleaned fields!", Toast.LENGTH_SHORT).show();
     }
 
     public void verifyReserveTime(List<Reservation> lista, Map <String, Object> reserve) {
@@ -235,16 +224,16 @@ public class ReserveFragment extends Fragment {
             myReservationDateEndTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "23:00");
 
             if (myReservationDateStartTime.before(myReservationDateStartTimeLimit)) {
-                Toast.makeText(getActivity(), "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
                 return;
             } else if (myReservationDateEndTime.after(myReservationDateEndTimeLimit)) {
-                Toast.makeText(getActivity(), "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             assert myReservationDateEndTime != null;
             if (myReservationDateEndTime.before(myReservationDateStartTime)) {
-                Toast.makeText(getActivity(), "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -274,7 +263,7 @@ public class ReserveFragment extends Fragment {
 
                     if ((myReservationDateStartTime.before(listReservationDateStartTime) || myReservationDateStartTime.compareTo(listReservationDateStartTime) == 0) &&
                             ((myReservationDateEndTime.before(listReservationDateEndTime) || myReservationDateEndTime.compareTo(listReservationDateEndTime) == 0) &&
-                            myReservationDateEndTime.after(listReservationDateStartTime))) {
+                                    myReservationDateEndTime.after(listReservationDateStartTime))) {
                         saveReservation = false;
                     }
                 } catch (Exception e) {
@@ -285,7 +274,7 @@ public class ReserveFragment extends Fragment {
         if (saveReservation) {
             saveReserve(reserve);
         } else {
-            Toast.makeText(getActivity(), "There already is a reservation at this date/time!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "There already is a reservation at this date/time!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -293,8 +282,11 @@ public class ReserveFragment extends Fragment {
         db.collection("reservation")
                 .add(reserve)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(getActivity(), "Saved reserve!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Saved reserve!", Toast.LENGTH_SHORT).show();
                     cleanFields();
+                    Intent intentListagem = new Intent(this, ManagementFragment.class);
+                    setResult(Activity.RESULT_OK, intentListagem);
+                    finish();
                 })
                 .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
     }
@@ -328,7 +320,7 @@ public class ReserveFragment extends Fragment {
         lista.add(getString(R.string.room_select));
 
         ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, lista);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
 
         spinnerRooms.setAdapter(adapter);
     }

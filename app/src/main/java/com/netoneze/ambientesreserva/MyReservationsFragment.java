@@ -1,5 +1,8 @@
 package com.netoneze.ambientesreserva;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +35,7 @@ public class MyReservationsFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ViewGroup root;
+    FloatingActionButton addReserveButton;
     ExpandableListView listView;
     public MyReservationsFragment() {
         // Required empty public constructor
@@ -43,6 +48,11 @@ public class MyReservationsFragment extends Fragment {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations, container, false);
         getActivity().setTitle("My Reservations");
         listView = root.findViewById(R.id.listViewReservations);
+        addReserveButton = root.findViewById(R.id.addReserveButton);
+        addReserveButton.setOnClickListener(v -> {
+            Intent addReserveIntent = new Intent(getActivity(), ReserveActivity.class);
+            startActivityForResult(addReserveIntent, 0);
+        });
         populaLista();
         return root;
     }
@@ -104,5 +114,15 @@ public class MyReservationsFragment extends Fragment {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK){
+            populaLista();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
