@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -56,53 +57,7 @@ public class RoomFormActivity extends AppCompatActivity {
         responsibleRadioButtonNo = findViewById(R.id.radioButtonResponsibleNo);
         responsibleRadioButtonYes = findViewById(R.id.radioButtonResponsibleYes);
 
-        Button buttonSave = findViewById(R.id.buttonSaveRoom);
-        Button buttonClean = findViewById(R.id.buttonCleanRoom);
-
         responsibleRadioButtonNo.setChecked(true);
-
-        buttonSave.setOnClickListener(v -> {
-            //Validation
-            if (nameEditText.getText().toString().equals("")) {
-               Toast.makeText(this, "The room must have a Name", Toast.LENGTH_SHORT).show();
-               return;
-            }
-            if (typeSpinner.getSelectedItemPosition() == 0){
-                Toast.makeText(this, "Select a type!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String roomName = nameEditText.getText().toString().toUpperCase();
-            Map<String, Object> room = new HashMap<>();
-            Map<String, Boolean> especificacoes = new HashMap<>();
-            room.put("aprovacaoAutomatica", chkAutomaticApproval.isChecked());
-            room.put("type", typeSpinner.getSelectedItem().toString());
-            room.put("name", roomName);
-            if (responsibleRadioGroup.getCheckedRadioButtonId() == R.id.radioButtonResponsibleYes) {
-                room.put("responsibleUid", user.getUid());
-            } else {
-                room.put("responsibleUid", "");
-            }
-            especificacoes.put("necessita_chave", chkBoxNeedsKey.isChecked());
-            especificacoes.put("possui_ar_condicionado", chkBoxHasAirConditioner.isChecked());
-            especificacoes.put("possui_ponto_rede_habilitado", chkBoxHasNetworkPoint.isChecked());
-            especificacoes.put("possui_projetor", chxBoxHasProjector.isChecked());
-            especificacoes.put("possui_tv", chxBoxHasTV.isChecked());
-            room.put("especificacoes", especificacoes);
-
-            db.collection("room").document(roomName)
-                    .set(room)
-                    .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(getApplicationContext(), "Saved room!", Toast.LENGTH_SHORT).show();
-                        cleanFields();
-                        Intent intentListagem = new Intent(this, ManagementFragment.class);
-                        setResult(Activity.RESULT_OK, intentListagem);
-                        finish();
-                    })
-                    .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
-        });
-
-        buttonClean.setOnClickListener(v -> cleanFields());
 
         if (bundle != null) {
             Room room = bundle.getParcelable(ManagementFragment.ROOM);
@@ -163,6 +118,46 @@ public class RoomFormActivity extends AppCompatActivity {
         }
     }
 
+    private void beginSaveRoom() {
+        //Validation
+        if (nameEditText.getText().toString().equals("")) {
+            Toast.makeText(this, "The room must have a Name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (typeSpinner.getSelectedItemPosition() == 0){
+            Toast.makeText(this, "Select a type!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String roomName = nameEditText.getText().toString().toUpperCase();
+        Map<String, Object> room = new HashMap<>();
+        Map<String, Boolean> especificacoes = new HashMap<>();
+        room.put("aprovacaoAutomatica", chkAutomaticApproval.isChecked());
+        room.put("type", typeSpinner.getSelectedItem().toString());
+        room.put("name", roomName);
+        if (responsibleRadioGroup.getCheckedRadioButtonId() == R.id.radioButtonResponsibleYes) {
+            room.put("responsibleUid", user.getUid());
+        } else {
+            room.put("responsibleUid", "");
+        }
+        especificacoes.put("necessita_chave", chkBoxNeedsKey.isChecked());
+        especificacoes.put("possui_ar_condicionado", chkBoxHasAirConditioner.isChecked());
+        especificacoes.put("possui_ponto_rede_habilitado", chkBoxHasNetworkPoint.isChecked());
+        especificacoes.put("possui_projetor", chxBoxHasProjector.isChecked());
+        especificacoes.put("possui_tv", chxBoxHasTV.isChecked());
+        room.put("especificacoes", especificacoes);
+
+        db.collection("room").document(roomName)
+                .set(room)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(getApplicationContext(), "Saved room!", Toast.LENGTH_SHORT).show();
+                    Intent intentListagem = new Intent(this, ManagementFragment.class);
+                    setResult(Activity.RESULT_OK, intentListagem);
+                    finish();
+                })
+                .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
+    }
+
     public void populaSpinner() {
         ArrayList<String> lista = new ArrayList<>();
 
@@ -188,5 +183,29 @@ public class RoomFormActivity extends AppCompatActivity {
         chkAutomaticApproval.setChecked(false);
         responsibleRadioButtonNo.setChecked(true);
         Toast.makeText(getApplicationContext(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.top_bar_save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.btnSave:
+                beginSaveRoom();
+                break;
+            case R.id.btnCleanFields:
+                cleanFields();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

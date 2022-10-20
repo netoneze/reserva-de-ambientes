@@ -50,7 +50,7 @@ public class MyReservationsFragment extends Fragment {
         listView = root.findViewById(R.id.listViewReservations);
         addReserveButton = root.findViewById(R.id.addReserveButton);
         addReserveButton.setOnClickListener(v -> {
-            Intent addReserveIntent = new Intent(getActivity(), ReserveActivity.class);
+            Intent addReserveIntent = new Intent(getActivity(), ReserveFormActivity.class);
             startActivityForResult(addReserveIntent, 0);
         });
         populaLista();

@@ -7,9 +7,9 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,11 +31,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class ReserveActivity extends AppCompatActivity {
+public class ReserveFormActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     Spinner spinnerRooms;
-    Button buttonSave, buttonClean;
     EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
     Date myReservationDateStartTime, myReservationDateEndTime, myReservationDateStartTimeLimit, myReservationDateEndTimeLimit;
     Calendar myCalendarDate = Calendar.getInstance();
@@ -46,9 +45,6 @@ public class ReserveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
         setTitle("Create a Reservation");
-        //Buttons
-        buttonSave = findViewById(R.id.buttonSave);
-        buttonClean = findViewById(R.id.buttonClean);
 
         //Reserve fields
         spinnerRooms = findViewById(R.id.spinnerRoom);
@@ -85,96 +81,94 @@ public class ReserveActivity extends AppCompatActivity {
                 .get(Calendar.YEAR), myCalendarDate.get(Calendar.MONTH),
                 myCalendarDate.get(Calendar.DAY_OF_MONTH)).show());
 
-        buttonSave.setOnClickListener(v -> {
-            //Validation
-            if (spinnerRooms.getSelectedItemPosition() == 0) {
-                Toast.makeText(this, "Select a room!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (editTextDate.getText().toString().equals("") ||
-                    editTextStartTime.getText().toString().equals("") ||
-                    editTextEndTime.getText().toString().equals("") ||
-                    editTextPurpose.getText().toString().equals("")
-            ) {
-                Toast.makeText(this, "Fill all the fields!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
-                Date todayDate = new Date();
-                Date reservationDate = sdf.parse(editTextDate.getText().toString() + " " + editTextStartTime.getText().toString());
-
-                assert reservationDate != null;
-                if (reservationDate.before(todayDate)) {
-                    Toast.makeText(this, "Incorrect date", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (Integer.parseInt(editTextStartTime.getText().toString()) < 0) {
-                    Toast.makeText(this, "Incorrect StartTime", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (Integer.parseInt(editTextEndTime.getText().toString()) < 0) {
-                    Toast.makeText(this, "Incorrect EndTime", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Map<String, Object> reserve = new HashMap<>();
-            reserve.put("date", editTextDate.getText().toString());
-            reserve.put("room", spinnerRooms.getSelectedItem().toString());
-            reserve.put("startTime", editTextStartTime.getText().toString());
-            reserve.put("endTime", editTextEndTime.getText().toString());
-            reserve.put("userId", user.getUid());
-            reserve.put("purpose", editTextPurpose.getText().toString());
-
-            List<Reservation> lista = new ArrayList<>();
-            db.collection("reservation")
-                    .whereEqualTo("room", spinnerRooms.getSelectedItem().toString())
-                    .whereEqualTo("date", editTextDate.getText().toString())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
-                                documentMap.put(document.getId(), document.getData());
-
-                                for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
-                                    Reservation reservation = new Reservation();
-                                    Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
-                                    for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
-                                        Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
-                                        if (entryMap2.getKey().equals("room")) {
-                                            reservation.setRoom(entryMap2.getValue().toString());
-                                        }
-                                        if (entryMap2.getKey().equals("date")) {
-                                            reservation.setDate(entryMap2.getValue().toString());
-                                        }
-                                        if (entryMap2.getKey().equals("startTime")) {
-                                            reservation.setStartTime(entryMap2.getValue().toString());
-                                        }
-                                        if (entryMap2.getKey().equals("endTime")) {
-                                            reservation.setEndTime(entryMap2.getValue().toString());
-                                        }
-                                        if (entryMap2.getKey().equals("purpose")) {
-                                            reservation.setPurpose(entryMap2.getValue().toString());
-                                        }
-                                    }
-                                    lista.add(reservation);
-                                }
-                            }
-                            verifyReserveTime(lista, reserve);
-                        } else {
-                            Log.d("erro", "Error getting documents: ", task.getException());
-                        }
-                    });
-        });
-
-        buttonClean.setOnClickListener(v -> cleanFields());
-
         populaSpinner();
+    }
+
+    private void beginSaveReserve() {
+        //Validation
+        if (spinnerRooms.getSelectedItemPosition() == 0) {
+            Toast.makeText(this, "Select a room!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (editTextDate.getText().toString().equals("") ||
+                editTextStartTime.getText().toString().equals("") ||
+                editTextEndTime.getText().toString().equals("") ||
+                editTextPurpose.getText().toString().equals("")
+        ) {
+            Toast.makeText(this, "Fill all the fields!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
+            Date todayDate = new Date();
+            Date reservationDate = sdf.parse(editTextDate.getText().toString() + " " + editTextStartTime.getText().toString());
+
+            assert reservationDate != null;
+            if (reservationDate.before(todayDate)) {
+                Toast.makeText(this, "Incorrect date", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (Integer.parseInt(editTextStartTime.getText().toString()) < 0) {
+                Toast.makeText(this, "Incorrect StartTime", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (Integer.parseInt(editTextEndTime.getText().toString()) < 0) {
+                Toast.makeText(this, "Incorrect EndTime", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Map<String, Object> reserve = new HashMap<>();
+        reserve.put("date", editTextDate.getText().toString());
+        reserve.put("room", spinnerRooms.getSelectedItem().toString());
+        reserve.put("startTime", editTextStartTime.getText().toString());
+        reserve.put("endTime", editTextEndTime.getText().toString());
+        reserve.put("userId", user.getUid());
+        reserve.put("purpose", editTextPurpose.getText().toString());
+
+        List<Reservation> lista = new ArrayList<>();
+        db.collection("reservation")
+                .whereEqualTo("room", spinnerRooms.getSelectedItem().toString())
+                .whereEqualTo("date", editTextDate.getText().toString())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Reservation reservation = new Reservation();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("room")) {
+                                        reservation.setRoom(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("date")) {
+                                        reservation.setDate(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("startTime")) {
+                                        reservation.setStartTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("endTime")) {
+                                        reservation.setEndTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("purpose")) {
+                                        reservation.setPurpose(entryMap2.getValue().toString());
+                                    }
+                                }
+                                lista.add(reservation);
+                            }
+                        }
+                        verifyReserveTime(lista, reserve);
+                    } else {
+                        Log.d("erro", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
     private void updateDateLabel() {
@@ -283,7 +277,6 @@ public class ReserveActivity extends AppCompatActivity {
                 .add(reserve)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(getApplicationContext(), "Saved reserve!", Toast.LENGTH_SHORT).show();
-                    cleanFields();
                     Intent intentListagem = new Intent(this, ManagementFragment.class);
                     setResult(Activity.RESULT_OK, intentListagem);
                     finish();
@@ -323,5 +316,29 @@ public class ReserveActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
 
         spinnerRooms.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.top_bar_save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.btnSave:
+                beginSaveReserve();
+                break;
+            case R.id.btnCleanFields:
+                cleanFields();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

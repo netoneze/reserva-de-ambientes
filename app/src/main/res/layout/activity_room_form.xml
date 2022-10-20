@@ -52,26 +52,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
-        <Button
-            android:id="@+id/buttonSaveRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/save"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupResponsibleRoom" />
-
-        <Button
-            android:id="@+id/buttonCleanRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/clean"
-            app:layout_constraintStart_toEndOf="@+id/buttonSaveRoom"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupResponsibleRoom" />
-
         <CheckBox
             android:id="@+id/automaticApproval"
             android:layout_width="wrap_content"

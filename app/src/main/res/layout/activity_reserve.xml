@@ -126,24 +126,5 @@
             android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@+id/textViewTime2" />
 
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/save"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEndTime" />
-
-        <Button
-            android:id="@+id/buttonClean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/clean"
-            app:layout_constraintStart_toEndOf="@+id/buttonSave"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEndTime" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

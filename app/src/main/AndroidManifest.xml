@@ -13,7 +13,7 @@
             android:name=".RoomFormActivity"
             android:exported="false" />
         <activity
-            android:name=".ReserveActivity"
+            android:name=".ReserveFormActivity"
             android:exported="false" />
         <activity
             android:name=".ui.login.LoginActivity"
