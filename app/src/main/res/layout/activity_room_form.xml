@@ -53,16 +53,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
         <CheckBox
-            android:id="@+id/automaticApproval"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/CheckBoxAutomaticApproval"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasTV" />
-
-        <CheckBox
             android:id="@+id/checkBoxNeedsKey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,6 +107,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewName2" />
 
+        <RadioGroup
+            android:id="@+id/radioGroupAutomaticApproval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName5">
+
+            <RadioButton
+                android:id="@+id/radioButtonOnlyFederalServant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/onlyFederalServant" />
+
+            <RadioButton
+                android:id="@+id/radioButtonEveryone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/everyone" />
+
+            <RadioButton
+                android:id="@+id/radioButtonNoOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_one" />
+        </RadioGroup>
+
         <TextView
             android:id="@+id/textViewName4"
             android:layout_width="wrap_content"
@@ -125,7 +143,17 @@
             android:layout_marginTop="30dp"
             android:text="@string/responsible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/automaticApproval" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupAutomaticApproval" />
+
+        <TextView
+            android:id="@+id/textViewName5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/automaticApprovalType"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxHasTV" />
 
         <RadioGroup
             android:id="@+id/radioGroupResponsibleRoom"

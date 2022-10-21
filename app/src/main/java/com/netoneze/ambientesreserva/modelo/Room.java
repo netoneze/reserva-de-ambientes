@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Room implements Parcelable {
-    private Boolean automaticApproval;
+    private Integer automaticApproval;
     private Map<String, Boolean> specifications;
     private String name;
     private String responsibleUid;
     private String type;
 
-    public Room(Boolean automaticApproval, Map<String, Boolean> specifications, String name, String responsibleUid, String type) {
+    public Room(Integer automaticApproval, Map<String, Boolean> specifications, String name, String responsibleUid, String type) {
         this.automaticApproval = automaticApproval;
         this.specifications = specifications;
         this.name = name;
@@ -27,9 +27,7 @@ public class Room implements Parcelable {
     }
 
     Room(Parcel in){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            this.automaticApproval = in.readBoolean();
-        }
+        this.automaticApproval = in.readInt();
         this.specifications = new HashMap<>();
         in.readMap(specifications, Map.class.getClassLoader());
         this.name = in.readString();
@@ -37,11 +35,11 @@ public class Room implements Parcelable {
         this.type = in.readString();
     }
 
-    public Boolean getAutomaticApproval() {
+    public Integer getAutomaticApproval() {
         return automaticApproval;
     }
 
-    public void setAutomaticApproval(Boolean automaticApproval) {
+    public void setAutomaticApproval(Integer automaticApproval) {
         this.automaticApproval = automaticApproval;
     }
 
@@ -84,9 +82,7 @@ public class Room implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            parcel.writeBoolean(automaticApproval);
-        }
+        parcel.writeInt(automaticApproval);
         parcel.writeMap(specifications);
         parcel.writeString(name);
         parcel.writeString(responsibleUid);

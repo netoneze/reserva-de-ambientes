@@ -92,7 +92,7 @@ public class ManagementFragment extends Fragment {
                                         room.setName(entryMap2.getValue().toString());
                                     }
                                     if (entryMap2.getKey().equals("aprovacaoAutomatica")) {
-                                        room.setAutomaticApproval((Boolean) entryMap2.getValue());
+                                        room.setAutomaticApproval(Integer.parseInt(entryMap2.getValue().toString()));
                                     }
                                     if (entryMap2.getKey().equals("type")) {
                                         room.setType(entryMap2.getValue().toString());

@@ -43,4 +43,9 @@
     <string name="purpose">Purpose</string>
     <string name="logout">Logout</string>
     <string name="login">Login</string>
+    <string name="automaticApprovalType">Automatic Approval</string>
+    <string name="onlyFederalServant">Federal Employee</string>
+    <string name="student">Student</string>
+    <string name="no_one">Nobody</string>
+    <string name="everyone">Federal Employee and Student</string>
 </resources>

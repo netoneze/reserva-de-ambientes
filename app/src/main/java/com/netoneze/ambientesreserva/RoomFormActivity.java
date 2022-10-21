@@ -31,9 +31,10 @@ public class RoomFormActivity extends AppCompatActivity {
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText nameEditText;
     private Spinner typeSpinner;
-    private RadioGroup responsibleRadioGroup;
-    private RadioButton responsibleRadioButtonNo, responsibleRadioButtonYes;
-    private CheckBox chkBoxNeedsKey, chkBoxHasAirConditioner, chkBoxHasNetworkPoint, chxBoxHasProjector, chxBoxHasTV, chkAutomaticApproval;
+    private RadioGroup responsibleRadioGroup, automaticApprovalRadioGroup;
+    private RadioButton responsibleRadioButtonNo, responsibleRadioButtonYes, automaticApprovalOnlyFederalRadioButton, automaticApprovalEveryoneRadioButton, automaticApprovalNobodyRadioButton;
+    private CheckBox chkBoxNeedsKey, chkBoxHasAirConditioner, chkBoxHasNetworkPoint, chxBoxHasProjector, chxBoxHasTV;
+    private Integer automaticApproval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,14 @@ public class RoomFormActivity extends AppCompatActivity {
         chkBoxHasNetworkPoint = findViewById(R.id.checkBoxHasNetworkPoint);
         chxBoxHasProjector = findViewById(R.id.checkBoxHasProjector);
         chxBoxHasTV = findViewById(R.id.checkBoxHasTV);
-        chkAutomaticApproval = findViewById(R.id.automaticApproval);
         responsibleRadioGroup = findViewById(R.id.radioGroupResponsibleRoom);
         responsibleRadioButtonNo = findViewById(R.id.radioButtonResponsibleNo);
         responsibleRadioButtonYes = findViewById(R.id.radioButtonResponsibleYes);
+        automaticApprovalRadioGroup = findViewById(R.id.radioGroupAutomaticApproval);
+        automaticApprovalOnlyFederalRadioButton = findViewById(R.id.radioButtonOnlyFederalServant);
+        automaticApprovalEveryoneRadioButton = findViewById(R.id.radioButtonEveryone);
+        automaticApprovalNobodyRadioButton = findViewById(R.id.radioButtonNoOne);
+
 
         responsibleRadioButtonNo.setChecked(true);
 
@@ -78,7 +83,20 @@ public class RoomFormActivity extends AppCompatActivity {
                 default:
                     break;
             }
-            chkAutomaticApproval.setChecked(room.getAutomaticApproval());
+
+            switch (room.getAutomaticApproval()) {
+                case 0:
+                    automaticApprovalOnlyFederalRadioButton.setChecked(true);
+                    break;
+                case 1:
+                    automaticApprovalEveryoneRadioButton.setChecked(true);
+                    break;
+                case 2:
+                    automaticApprovalNobodyRadioButton.setChecked(true);
+                    break;
+                default:
+                    break;
+            }
 
             if (room.getResponsibleUid().equals(user.getUid())) {
                 responsibleRadioButtonYes.setChecked(true);
@@ -129,10 +147,30 @@ public class RoomFormActivity extends AppCompatActivity {
             return;
         }
 
+        if (automaticApprovalRadioGroup.getCheckedRadioButtonId() == -1){
+            Toast.makeText(this, "Select an automatic approval type!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        switch (automaticApprovalRadioGroup.getCheckedRadioButtonId()) {
+            case R.id.radioButtonOnlyFederalServant:
+                automaticApproval = 0;
+                break;
+            case R.id.radioButtonEveryone:
+                automaticApproval = 1;
+                break;
+            case R.id.radioButtonNoOne:
+                automaticApproval = 2;
+                break;
+            default:
+                automaticApproval = -1;
+                break;
+        }
+
         String roomName = nameEditText.getText().toString().toUpperCase();
         Map<String, Object> room = new HashMap<>();
         Map<String, Boolean> especificacoes = new HashMap<>();
-        room.put("aprovacaoAutomatica", chkAutomaticApproval.isChecked());
+        room.put("aprovacaoAutomatica", automaticApproval);
         room.put("type", typeSpinner.getSelectedItem().toString());
         room.put("name", roomName);
         if (responsibleRadioGroup.getCheckedRadioButtonId() == R.id.radioButtonResponsibleYes) {
@@ -180,7 +218,7 @@ public class RoomFormActivity extends AppCompatActivity {
         chkBoxHasNetworkPoint.setChecked(false);
         chxBoxHasProjector.setChecked(false);
         chxBoxHasTV.setChecked(false);
-        chkAutomaticApproval.setChecked(false);
+        automaticApprovalRadioGroup.clearCheck();
         responsibleRadioButtonNo.setChecked(true);
         Toast.makeText(getApplicationContext(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
     }
