@@ -19,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.netoneze.ambientesreserva.modelo.Room;
+import com.netoneze.ambientesreserva.modelo.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,22 +32,27 @@ public class RoomFormActivity extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText nameEditText;
-    private Spinner typeSpinner;
+    private Spinner typeSpinner, responsibleSpinner;
     private RadioGroup responsibleRadioGroup, automaticApprovalRadioGroup;
     private RadioButton responsibleRadioButtonNo, responsibleRadioButtonYes, automaticApprovalOnlyFederalRadioButton, automaticApprovalEveryoneRadioButton, automaticApprovalNobodyRadioButton;
     private CheckBox chkBoxNeedsKey, chkBoxHasAirConditioner, chkBoxHasNetworkPoint, chxBoxHasProjector, chxBoxHasTV;
     private Integer automaticApproval;
-
+    private ArrayList<User> listaUsers = new ArrayList<>();
+    private Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_form);
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         setTitle("Create a Room");
         nameEditText = findViewById(R.id.editTextRoomName);
-        typeSpinner = (Spinner) findViewById(R.id.spinnerRoomType);
+        typeSpinner = findViewById(R.id.spinnerRoomType);
+        responsibleSpinner = findViewById(R.id.spinnerResponsible);
 
+        populaUsers();
+
+        populaSpinnerResponsible(true);
         populaSpinner();
 
         chkBoxNeedsKey = findViewById(R.id.checkBoxNeedsKey);
@@ -53,16 +60,11 @@ public class RoomFormActivity extends AppCompatActivity {
         chkBoxHasNetworkPoint = findViewById(R.id.checkBoxHasNetworkPoint);
         chxBoxHasProjector = findViewById(R.id.checkBoxHasProjector);
         chxBoxHasTV = findViewById(R.id.checkBoxHasTV);
-        responsibleRadioGroup = findViewById(R.id.radioGroupResponsibleRoom);
-        responsibleRadioButtonNo = findViewById(R.id.radioButtonResponsibleNo);
-        responsibleRadioButtonYes = findViewById(R.id.radioButtonResponsibleYes);
+
         automaticApprovalRadioGroup = findViewById(R.id.radioGroupAutomaticApproval);
         automaticApprovalOnlyFederalRadioButton = findViewById(R.id.radioButtonOnlyFederalServant);
         automaticApprovalEveryoneRadioButton = findViewById(R.id.radioButtonEveryone);
         automaticApprovalNobodyRadioButton = findViewById(R.id.radioButtonNoOne);
-
-
-        responsibleRadioButtonNo.setChecked(true);
 
         if (bundle != null) {
             Room room = bundle.getParcelable(ManagementFragment.ROOM);
@@ -98,9 +100,7 @@ public class RoomFormActivity extends AppCompatActivity {
                     break;
             }
 
-            if (room.getResponsibleUid().equals(user.getUid())) {
-                responsibleRadioButtonYes.setChecked(true);
-            }
+
 
             for(Map.Entry<String, Boolean> entry : roomSpecifications.entrySet()) {
                 switch (entry.getKey()) {
@@ -142,13 +142,19 @@ public class RoomFormActivity extends AppCompatActivity {
             Toast.makeText(this, "The room must have a Name", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (typeSpinner.getSelectedItemPosition() == 0){
+
+        if (typeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Select a type!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (automaticApprovalRadioGroup.getCheckedRadioButtonId() == -1){
+        if (automaticApprovalRadioGroup.getCheckedRadioButtonId() == -1) {
             Toast.makeText(this, "Select an automatic approval type!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (responsibleSpinner.getSelectedItemPosition() == 0) {
+            Toast.makeText(this, "Select a responsible!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,11 +179,13 @@ public class RoomFormActivity extends AppCompatActivity {
         room.put("aprovacaoAutomatica", automaticApproval);
         room.put("type", typeSpinner.getSelectedItem().toString());
         room.put("name", roomName);
-        if (responsibleRadioGroup.getCheckedRadioButtonId() == R.id.radioButtonResponsibleYes) {
-            room.put("responsibleUid", user.getUid());
-        } else {
-            room.put("responsibleUid", "");
+
+        for (User firebaseUser : listaUsers) {
+            if (firebaseUser.getUsername().equals(responsibleSpinner.getSelectedItem().toString())) {
+                room.put("responsibleUid", firebaseUser.getUserId());
+            }
         }
+
         especificacoes.put("necessita_chave", chkBoxNeedsKey.isChecked());
         especificacoes.put("possui_ar_condicionado", chkBoxHasAirConditioner.isChecked());
         especificacoes.put("possui_ponto_rede_habilitado", chkBoxHasNetworkPoint.isChecked());
@@ -196,6 +204,40 @@ public class RoomFormActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w("failure", "Error adding document", e));
     }
 
+    public void populaUsers() {
+        db.collection("user")
+                .whereEqualTo("type", 1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for ( QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                User authUser = new User();
+                                authUser.setUserId(entry.getKey());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("username")) {
+                                        authUser.setUsername(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("type")) {
+                                        authUser.setType(entryMap2.getValue().toString());
+                                    }
+                                }
+                                listaUsers.add(authUser);
+                            }
+                        }
+                        populaSpinnerResponsible(false);
+                        setResponsibleSpinnerOnEdit();
+                    } else {
+                        Log.w("", "Error getting documents.", task.getException());
+                    }
+                });
+    }
+
     public void populaSpinner() {
         ArrayList<String> lista = new ArrayList<>();
 
@@ -210,9 +252,44 @@ public class RoomFormActivity extends AppCompatActivity {
         typeSpinner.setAdapter(adapter);
     }
 
+    public void populaSpinnerResponsible(Boolean onCreate) {
+        ArrayList<String> lista = new ArrayList<>();
+
+        lista.add(getString(R.string.responsible_select)); // 0
+
+        if (!onCreate) {
+            for(User firebaseUser : listaUsers) {
+                lista.add(firebaseUser.getUsername());
+            }
+        }
+
+        ArrayAdapter<String> adapter;
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
+
+        responsibleSpinner.setAdapter(adapter);
+    }
+
+    public void setResponsibleSpinnerOnEdit() {
+        if (bundle != null) {
+            Room room = bundle.getParcelable(ManagementFragment.ROOM);
+            for (int i = 0; i < responsibleSpinner.getCount() ; i++) {
+                String username = "";
+                for(User firebaseUser : listaUsers) {
+                    if (firebaseUser.getUserId().equals(room.getResponsibleUid())) {
+                        username = firebaseUser.getUsername();
+                    }
+                }
+                if(responsibleSpinner.getItemAtPosition(i).toString().equals(username)) {
+                    responsibleSpinner.setSelection(i);
+                }
+            }
+        }
+
+    }
     private void cleanFields() {
         nameEditText.setText("");
         typeSpinner.setSelection(0);
+        responsibleSpinner.setSelection(0);
         chkBoxNeedsKey.setChecked(false);
         chkBoxHasAirConditioner.setChecked(false);
         chkBoxHasNetworkPoint.setChecked(false);

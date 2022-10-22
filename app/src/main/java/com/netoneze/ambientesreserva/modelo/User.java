@@ -1,18 +1,21 @@
 package com.netoneze.ambientesreserva.modelo;
-import com.google.firebase.auth.FirebaseUser;
 
 public class User {
 
     private String userId;
-    private String nome;
-    private String email;
-    private String ra;
+    private String username;
+    private String type;
+    private Integer positionInSpinner;
 
-    public User(FirebaseUser user, int userId, String nome, String email, String ra) {
-        this.userId = user.getUid();
-        this.email = user.getEmail();
-        this.nome = user.getDisplayName();
-        this.ra = user.getPhoneNumber();
+    public User(String userId, String username, String type, Integer positionInSpinner) {
+        this.userId = userId;
+        this.username = username;
+        this.type = type;
+        this.positionInSpinner = positionInSpinner;
+    }
+
+    public User() {
+
     }
 
     public String getUserId() {
@@ -23,28 +26,27 @@ public class User {
         this.userId = userId;
     }
 
-    public String getNome() {
-        return nome;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getType() {
+        return type;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getRa() {
-        return ra;
+    public Integer getPositionInSpinner() {
+        return positionInSpinner;
     }
 
-    public void setRa(String ra) {
-        this.ra = ra;
+    public void setPositionInSpinner(Integer positionInSpinner) {
+        this.positionInSpinner = positionInSpinner;
     }
-
 }

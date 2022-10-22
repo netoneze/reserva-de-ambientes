@@ -39,7 +39,8 @@
     <string name= "yes">Yes</string>
     <string name= "no">No</string>
     <string name= "confirmation">Confirm</string>
-    <string name="responsible">Are you the responsible?</string>
+    <string name="responsible">Who is the responsible?</string>
+    <string name="responsible_select">Select a Responsible</string>
     <string name="purpose">Purpose</string>
     <string name="logout">Logout</string>
     <string name="login">Login</string>

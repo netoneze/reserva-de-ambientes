@@ -39,7 +39,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/specifications"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerRoomType" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerResponsible" />
 
         <EditText
             android:id="@+id/editTextRoomName"
@@ -136,16 +136,6 @@
         </RadioGroup>
 
         <TextView
-            android:id="@+id/textViewName4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/responsible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupAutomaticApproval" />
-
-        <TextView
             android:id="@+id/textViewName5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,27 +145,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxHasTV" />
 
-        <RadioGroup
-            android:id="@+id/radioGroupResponsibleRoom"
+        <TextView
+            android:id="@+id/textViewName4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/responsible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerRoomType" />
+
+        <Spinner
+            android:id="@+id/spinnerResponsible"
+            android:layout_width="332dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewName4">
-
-            <RadioButton
-                android:id="@+id/radioButtonResponsibleYes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/yes" />
-
-            <RadioButton
-                android:id="@+id/radioButtonResponsibleNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no" />
-        </RadioGroup>
+            app:layout_constraintTop_toBottomOf="@+id/textViewName4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
