@@ -18,9 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.netoneze.ambientesreserva.modelo.Reservation;
+import com.netoneze.ambientesreserva.modelo.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ import java.util.Map;
 public class ReserveFormActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    User currentUser = new User();
     Spinner spinnerRooms;
     EditText editTextDate, editTextStartTime, editTextEndTime, editTextPurpose;
     Date myReservationDateStartTime, myReservationDateEndTime, myReservationDateStartTimeLimit, myReservationDateEndTimeLimit;
@@ -82,6 +86,7 @@ public class ReserveFormActivity extends AppCompatActivity {
                 myCalendarDate.get(Calendar.DAY_OF_MONTH)).show());
 
         populaSpinner();
+        populaUser();
     }
 
     private void beginSaveReserve() {
@@ -164,7 +169,38 @@ public class ReserveFormActivity extends AppCompatActivity {
                                 lista.add(reservation);
                             }
                         }
-                        verifyReserveTime(lista, reserve);
+                        DocumentReference docRef = db.collection("room").document(spinnerRooms.getSelectedItem().toString());
+                        docRef.get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                DocumentSnapshot document1 = task1.getResult();
+                                if (document1.exists()) {
+                                    String reserveStatus = "";
+                                    Log.d("documentUserData", "DocumentSnapshot data: " + document1.getData());
+                                    for (Map.Entry<String, Object> object : document1.getData().entrySet()) {
+                                        if (object.getKey().equals("aprovacaoAutomatica")) {
+                                            if ( (Long) object.getValue() == 0) {
+                                                if (currentUser.getType().equals("1") || currentUser.getType().equals("2") ) {
+                                                    reserveStatus = "approved";
+                                                }
+                                                if (currentUser.getType().equals("0")) {
+                                                    reserveStatus = "pending";
+                                                }
+                                            } else if ( (Long) object.getValue() == 1) {
+                                                reserveStatus = "approved";
+                                            } else if ( (Long) object.getValue() == 2) {
+                                                reserveStatus = "pending";
+                                            }
+                                        }
+                                    }
+                                    reserve.put("status", reserveStatus);
+                                    verifyReserveTime(lista, reserve);
+                                } else {
+                                    Log.d("noDocumentError", "No such document");
+                                }
+                            } else {
+                                Log.d("failMessage", "get failed with ", task1.getException());
+                            }
+                        });
                     } else {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }
@@ -316,6 +352,27 @@ public class ReserveFormActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
 
         spinnerRooms.setAdapter(adapter);
+    }
+
+    public void populaUser() {
+        DocumentReference docRef = db.collection("user").document(user.getUid());
+        docRef.get().addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                DocumentSnapshot document1 = task1.getResult();
+                if (document1.exists()) {
+                    Log.d("documentUserData", "DocumentSnapshot data: " + document1.getData());
+                    for (Map.Entry<String, Object> object : document1.getData().entrySet()) {
+                        if (object.getKey().equals("type")) {
+                            currentUser.setType(object.getValue().toString());
+                        }
+                    }
+                } else {
+                    Log.d("noDocumentError", "No such document");
+                }
+            } else {
+                Log.d("failMessage", "get failed with ", task1.getException());
+            }
+        });
     }
 
     @Override
