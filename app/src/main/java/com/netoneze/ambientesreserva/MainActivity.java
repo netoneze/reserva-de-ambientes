@@ -12,12 +12,18 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.netoneze.ambientesreserva.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     NavigationBarView bottomNavigationView;
     ManagementFragment managementFragment = new ManagementFragment();
     MyReservationsFragment myReservationsFragment = new MyReservationsFragment();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +31,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Ambient Reservation");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment, "").commit();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
+        if (bundle != null && user != null) {
             String tipoUser = bundle.getString(LoginActivity.TIPO);
-            if (tipoUser.equals("Aluno")){
+            if (tipoUser.equals("Aluno")) {
                 bottomNavigationView.getMenu().removeItem(R.id.management_page);
+            } else if (tipoUser.equals("Servidor")) {
+                db.collection("room")
+                        .whereEqualTo("responsibleUid", user.getUid())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot document = task.getResult();
+                                if (document.getDocuments().isEmpty()) {
+                                    bottomNavigationView.getMenu().removeItem(R.id.management_page);
+                                }
+                            }
+                        });
             }
         }
         bottomNavigationView.setOnItemSelectedListener(item -> {

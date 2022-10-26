@@ -103,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                             if (object.getKey().equals("type")) {
                                 if ( (Long) object.getValue() == 0) {
                                     intent.putExtra(TIPO, "Aluno");
+                                } else if ( (Long) object.getValue() == 1) {
+                                    intent.putExtra(TIPO, "Servidor");
+                                } else if ( (Long) object.getValue() == 2) {
+                                    intent.putExtra(TIPO, "Admin");
                                 }
                                 Log.d("userType", object.getValue().toString());
                                 userType[0] = (Long) object.getValue();
@@ -149,6 +153,10 @@ public class LoginActivity extends AppCompatActivity {
                                             if (object.getKey().equals("type")) {
                                                 if ( (Long) object.getValue() == 0) {
                                                     intent.putExtra(TIPO, "Aluno");
+                                                } else if ( (Long) object.getValue() == 1) {
+                                                    intent.putExtra(TIPO, "Servidor");
+                                                } else if ( (Long) object.getValue() == 2) {
+                                                    intent.putExtra(TIPO, "Admin");
                                                 }
                                                 Log.d("userType", object.getValue().toString());
                                                 userType[0] = (Long) object.getValue();
