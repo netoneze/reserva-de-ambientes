@@ -8,8 +8,9 @@ public class Reservation {
     private String room;
     private String userName;
     private String documentId;
+    private String status;
 
-    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userName, String documentId) {
+    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userName, String documentId, String status) {
         this.date = date;
         this.purpose = purpose;
         this.startTime = startTime;
@@ -17,11 +18,16 @@ public class Reservation {
         this.room = room;
         this.userName = userName;
         this.documentId = documentId;
+        this.status = status;
     }
 
     public Reservation() {
 
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 
     public String getDocumentId() {
         return documentId;

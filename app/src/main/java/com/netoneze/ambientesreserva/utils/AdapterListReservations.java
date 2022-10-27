@@ -1,6 +1,7 @@
 package com.netoneze.ambientesreserva.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,18 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
 
         Reservation reservation = (Reservation) getChild(groupPosition, 0);
 
-        tfTitulo.setText(reservation.getRoom());
+        String capitalizedStatus = reservation.getStatus().substring(0, 1).toUpperCase() + reservation.getStatus().substring(1);
+        tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")");
+
+        if (reservation.getStatus().equals("approved")) {
+            convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
+        }
+        if (reservation.getStatus().equals("pending")) {
+            convertView.setBackgroundColor(Color.parseColor("#ccebff"));
+        }
+        if (reservation.getStatus().equals("disapproved")) {
+            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+        }
 
         return convertView;
     }

@@ -88,6 +88,9 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("purpose")) {
                                         reservation.setPurpose(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("status")) {
+                                        reservation.setStatus(entryMap2.getValue().toString());
+                                    }
                                     reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
