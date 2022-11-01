@@ -206,7 +206,6 @@ public class RoomFormActivity extends AppCompatActivity {
 
     public void populaUsers() {
         db.collection("user")
-                .whereEqualTo("type", 1)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -227,7 +226,11 @@ public class RoomFormActivity extends AppCompatActivity {
                                         authUser.setType(entryMap2.getValue().toString());
                                     }
                                 }
-                                listaUsers.add(authUser);
+                                if (authUser.getType() != null) {
+                                    if (authUser.getType().equals("1")) {
+                                        listaUsers.add(authUser);
+                                    }
+                                }
                             }
                         }
                         populaSpinnerResponsible(false);

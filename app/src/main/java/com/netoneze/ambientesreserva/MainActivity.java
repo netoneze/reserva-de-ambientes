@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationBarView bottomNavigationView;
     ManagementFragment managementFragment = new ManagementFragment();
     MyReservationsFragment myReservationsFragment = new MyReservationsFragment();
+    ReserveRequestsFragment reserveRequestsFragment = new ReserveRequestsFragment();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = null;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
             String tipoUser = bundle.getString(LoginActivity.TIPO);
             if (tipoUser.equals("Aluno")) {
                 bottomNavigationView.getMenu().removeItem(R.id.management_page);
+                bottomNavigationView.getMenu().removeItem(R.id.reservation_requests);
             } else if (tipoUser.equals("Servidor")) {
                 db.collection("room")
                         .whereEqualTo("responsibleUid", user.getUid())
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                                 QuerySnapshot document = task.getResult();
                                 if (document.getDocuments().isEmpty()) {
                                     bottomNavigationView.getMenu().removeItem(R.id.management_page);
+                                    bottomNavigationView.getMenu().removeItem(R.id.reservation_requests);
                                 }
                             }
                         });
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.management_page:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, managementFragment).commit();
+                    return true;
+                case R.id.reservation_requests:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, reserveRequestsFragment).commit();
                     return true;
             }
             return true;

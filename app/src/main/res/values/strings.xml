@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Reserva de Ambientes</string>
     <string name="management">Management</string>
-    <string name="my_reservations">My Reservations</string>
+    <string name="my_reservations">Reservations</string>
     <string name="name">Name</string>
     <string name="type">Type</string>
     <string name="department">Department</string>
@@ -49,4 +49,8 @@
     <string name="student">Student</string>
     <string name="no_one">Nobody</string>
     <string name="everyone">Federal Employee and Student</string>
+    <string name="reserve_request">Requests</string>
+    <string name="username">Username</string>
+    <string name="approve">Approve</string>
+    <string name="disapprove">Disapprove</string>
 </resources>

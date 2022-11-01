@@ -9,5 +9,10 @@
         android:enabled="true"
         android:icon="@drawable/manage_48px"
         android:title="@string/management"/>
+    <item
+        android:id="@+id/reservation_requests"
+        android:enabled="true"
+        android:icon="@drawable/event_available_48px"
+        android:title="@string/reserve_request" />
 
 </menu>

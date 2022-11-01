@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ReserveFormActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -133,6 +134,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         reserve.put("endTime", editTextEndTime.getText().toString());
         reserve.put("userId", user.getUid());
         reserve.put("purpose", editTextPurpose.getText().toString());
+        reserve.put("username", currentUser.getUsername());
 
         List<Reservation> lista = new ArrayList<>();
         db.collection("reservation")
@@ -261,6 +263,12 @@ public class ReserveFormActivity extends AppCompatActivity {
                 return;
             }
 
+            long difference_In_Time = myReservationDateEndTime.getTime() - myReservationDateStartTime.getTime();
+            long difference_In_Hours = TimeUnit.MILLISECONDS.toHours(difference_In_Time) % 24;
+            if (difference_In_Hours == 0) {
+                Toast.makeText(this, "The reservation must have at least 60 minutes!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             assert myReservationDateEndTime != null;
             if (myReservationDateEndTime.before(myReservationDateStartTime)) {
                 Toast.makeText(this, "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
@@ -364,6 +372,9 @@ public class ReserveFormActivity extends AppCompatActivity {
                     for (Map.Entry<String, Object> object : document1.getData().entrySet()) {
                         if (object.getKey().equals("type")) {
                             currentUser.setType(object.getValue().toString());
+                        }
+                        if (object.getKey().equals("username")) {
+                            currentUser.setUsername(object.getValue().toString());
                         }
                     }
                 } else {
