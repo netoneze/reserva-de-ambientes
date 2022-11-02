@@ -59,7 +59,6 @@ public class MyReservationsFragment extends Fragment {
             startActivityForResult(addReserveIntent, 0);
         });
         populaUser();
-        populaLista();
         return root;
     }
 
@@ -89,7 +88,7 @@ public class MyReservationsFragment extends Fragment {
         });
     }
 
-    public void populaLista(){
+    public void populaLista() {
         List<Reservation> lista = new ArrayList<>();
         db.collection("reservation")
                 .whereEqualTo("userId", user.getUid())
@@ -123,6 +122,9 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("status")) {
                                         reservation.setStatus(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("situation")) {
+                                        reservation.setSituation(entryMap2.getValue().toString());
+                                    }
                                     reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
@@ -151,7 +153,7 @@ public class MyReservationsFragment extends Fragment {
                 });
     }
 
-    public void populaListaTodasReservas(){
+    public void populaListaTodasReservas() {
         List<Reservation> lista = new ArrayList<>();
         db.collection("reservation")
                 .get()
@@ -184,6 +186,9 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("status")) {
                                         reservation.setStatus(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("situation")) {
+                                        reservation.setSituation(entryMap2.getValue().toString());
+                                    }
                                     reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
@@ -215,8 +220,12 @@ public class MyReservationsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK){
-            populaLista();
+        if (resultCode == RESULT_OK) {
+            if (currentUser.getType().equals("2")) {
+                populaListaTodasReservas();
+            } else {
+                populaLista();
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);

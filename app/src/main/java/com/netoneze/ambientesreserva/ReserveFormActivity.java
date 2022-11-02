@@ -135,6 +135,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         reserve.put("userId", user.getUid());
         reserve.put("purpose", editTextPurpose.getText().toString());
         reserve.put("username", currentUser.getUsername());
+        reserve.put("situation", "active");
 
         List<Reservation> lista = new ArrayList<>();
         db.collection("reservation")

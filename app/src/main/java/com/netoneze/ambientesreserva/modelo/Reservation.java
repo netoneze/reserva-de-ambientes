@@ -9,8 +9,9 @@ public class Reservation {
     private String userName;
     private String documentId;
     private String status;
+    private String situation;
 
-    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userName, String documentId, String status) {
+    public Reservation(String date, String purpose, String startTime, String endTime, String room, String userName, String documentId, String status, String situation) {
         this.date = date;
         this.purpose = purpose;
         this.startTime = startTime;
@@ -19,6 +20,7 @@ public class Reservation {
         this.userName = userName;
         this.documentId = documentId;
         this.status = status;
+        this.situation = situation;
     }
 
     public Reservation() {
@@ -84,4 +86,8 @@ public class Reservation {
     public void setUserName(String userId) {
         this.userName = userId;
     }
+
+    public String getSituation() { return situation; }
+
+    public void setSituation(String situation) { this.situation = situation; }
 }
