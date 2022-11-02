@@ -299,7 +299,6 @@ public class RoomFormActivity extends AppCompatActivity {
         chxBoxHasProjector.setChecked(false);
         chxBoxHasTV.setChecked(false);
         automaticApprovalRadioGroup.clearCheck();
-        responsibleRadioButtonNo.setChecked(true);
         Toast.makeText(getApplicationContext(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
     }
 

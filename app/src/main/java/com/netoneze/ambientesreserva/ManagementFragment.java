@@ -319,7 +319,7 @@ public class ManagementFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK){
-            populaLista();
+            populaUser();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
