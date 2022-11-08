@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, myReservationsFragment, "").commit();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        assert user != null;
+        if (user.getDisplayName().isEmpty()){
+            Intent usernameIntent = new Intent(this, NameActivity.class);
+            startActivity(usernameIntent);
+        }
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && user != null) {
