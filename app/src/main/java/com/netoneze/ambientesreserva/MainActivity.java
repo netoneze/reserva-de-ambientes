@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         assert user != null;
-        if (user.getDisplayName().isEmpty()){
+        if (user.getDisplayName() == null){
             Intent usernameIntent = new Intent(this, NameActivity.class);
             startActivity(usernameIntent);
         }
