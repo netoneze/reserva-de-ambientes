@@ -320,6 +320,9 @@ public class RoomFormActivity extends AppCompatActivity {
             case R.id.btnCleanFields:
                 cleanFields();
                 break;
+            case android.R.id.home:
+                this.finish();
+                return true;
             default:
                 break;
         }

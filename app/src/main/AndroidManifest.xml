@@ -11,12 +11,10 @@
         android:launchMode="singleTask">
         <activity
             android:name=".RoomFormActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:exported="false" />
         <activity
             android:name=".ReserveFormActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:exported="false" />
         <activity
             android:name=".NameActivity"
             android:exported="false" />
