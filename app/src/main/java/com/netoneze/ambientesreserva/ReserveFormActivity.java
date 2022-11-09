@@ -50,7 +50,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
         setTitle("Create a Reservation");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Reserve fields
         spinnerRooms = findViewById(R.id.spinnerRoom);
         editTextDate = findViewById(R.id.editTextDate);

@@ -46,6 +46,7 @@ public class RoomFormActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         setTitle("Create a Room");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         nameEditText = findViewById(R.id.editTextRoomName);
         typeSpinner = findViewById(R.id.spinnerRoomType);
         responsibleSpinner = findViewById(R.id.spinnerResponsible);
