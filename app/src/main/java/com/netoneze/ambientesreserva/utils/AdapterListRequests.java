@@ -127,7 +127,7 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
         TextView tfEndTime = convertView.findViewById(R.id.tf_endTime_body);
         TextView tfPurpose = convertView.findViewById(R.id.tf_purpose_body);
         TextView tfUsername = convertView.findViewById(R.id.tf_username_body);
-
+        TextView tfUsertype = convertView.findViewById(R.id.tf_usertype_body);
         Reservation reservation = (Reservation) getChild(groupPosition, childPosition);
 
         tfDate.setText(reservation.getDate());
@@ -135,7 +135,7 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
         tfEndTime.setText(reservation.getEndTime());
         tfPurpose.setText(reservation.getPurpose());
         tfUsername.setText(reservation.getUserName());
-
+        tfUsertype.setText(reservation.getUsertype());
         Button approveBtn = convertView.findViewById(R.id.buttonApprove);
         Button disapproveBtn = convertView.findViewById(R.id.buttonDisapprove);
 

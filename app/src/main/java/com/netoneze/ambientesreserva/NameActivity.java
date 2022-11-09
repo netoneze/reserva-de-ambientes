@@ -35,7 +35,7 @@ public class NameActivity extends AppCompatActivity {
         }
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName("Jane Q. User")
+                .setDisplayName(editTextName.getText().toString())
                 .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
 

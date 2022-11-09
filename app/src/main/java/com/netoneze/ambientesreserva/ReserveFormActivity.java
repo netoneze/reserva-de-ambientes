@@ -134,7 +134,24 @@ public class ReserveFormActivity extends AppCompatActivity {
         reserve.put("endTime", editTextEndTime.getText().toString());
         reserve.put("userId", user.getUid());
         reserve.put("purpose", editTextPurpose.getText().toString());
-        reserve.put("username", currentUser.getUsername());
+        reserve.put("username", user.getDisplayName());
+
+        String userType = "";
+        switch(currentUser.getType()) {
+            case "0":
+                userType = "Student";
+                break;
+            case "1":
+                userType = "Federal Employee";
+                break;
+            case "2":
+                userType = "Admin";
+                break;
+            default:
+                break;
+        }
+
+        reserve.put("usertype", userType);
         reserve.put("situation", "active");
 
         List<Reservation> lista = new ArrayList<>();

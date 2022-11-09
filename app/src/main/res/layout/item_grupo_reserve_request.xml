@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="320dp"
     android:background="#ff9b999a">
 
     <TextView
@@ -100,11 +100,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/username"
+        android:text="@string/name"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tf_endTime" />
+
+    <TextView
+        android:id="@+id/tf_usertype"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/type"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tf_username" />
 
     <TextView
         android:id="@+id/tf_endTime_body"
@@ -126,32 +138,43 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/username"
+        android:text="@string/name"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/tf_endTime"
+        app:layout_constraintStart_toEndOf="@+id/tf_username"
         app:layout_constraintTop_toBottomOf="@+id/tf_endTime_body" />
+
+    <TextView
+        android:id="@+id/tf_usertype_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="end"
+        android:text="@string/type"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tf_usertype"
+        app:layout_constraintTop_toBottomOf="@+id/tf_username_body" />
 
     <Button
         android:id="@+id/buttonApprove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="27dp"
+        android:layout_marginTop="20dp"
         android:text="@string/approve"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tf_username" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_usertype" />
 
     <Button
         android:id="@+id/buttonDisapprove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="@string/disapprove"
         app:layout_constraintStart_toEndOf="@+id/buttonApprove"
-        app:layout_constraintTop_toBottomOf="@+id/tf_username" />
+        app:layout_constraintTop_toBottomOf="@+id/tf_usertype_body" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

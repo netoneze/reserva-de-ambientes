@@ -176,6 +176,9 @@ public class ReserveRequestsFragment extends Fragment {
                                         if (entryMap2.getKey().equals("username")) {
                                             reservation.setUserName(entryMap2.getValue().toString());
                                         }
+                                        if (entryMap2.getKey().equals("usertype")) {
+                                            reservation.setUsertype(entryMap2.getValue().toString());
+                                        }
                                         reservation.setDocumentId(entry.getKey());
                                     }
                                     reservationList.add(reservation);
