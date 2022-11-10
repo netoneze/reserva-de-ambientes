@@ -3,7 +3,25 @@
 
     <item
         android:id="@+id/logout_menu"
+        android:icon="@drawable/logout_48px"
         android:title="@string/logout"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/filter_all"
+        android:title="@string/all"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/filter_pending"
+        android:title="@string/pending"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/filter_approved"
+        android:title="@string/approved"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/filter_disapproved"
+        android:title="@string/disapproved"
+        app:showAsAction="never" />
+
 
 </menu>

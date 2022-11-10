@@ -51,7 +51,6 @@ public class MyReservationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations, container, false);
-        getActivity().setTitle("My Reservations");
         listView = root.findViewById(R.id.listViewReservations);
         addReserveButton = root.findViewById(R.id.addReserveButton);
         addReserveButton.setOnClickListener(v -> {
@@ -156,6 +155,137 @@ public class MyReservationsFragment extends Fragment {
     public void populaListaTodasReservas() {
         List<Reservation> lista = new ArrayList<>();
         db.collection("reservation")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Reservation reservation = new Reservation();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("room")) {
+                                        reservation.setRoom(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("date")) {
+                                        reservation.setDate(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("startTime")) {
+                                        reservation.setStartTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("endTime")) {
+                                        reservation.setEndTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("purpose")) {
+                                        reservation.setPurpose(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("status")) {
+                                        reservation.setStatus(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("situation")) {
+                                        reservation.setSituation(entryMap2.getValue().toString());
+                                    }
+                                    reservation.setDocumentId(entry.getKey());
+                                }
+                                lista.add(reservation);
+                            }
+                        }
+
+                        List<String> lstGrupos = new ArrayList<>();
+
+                        for (int i = 0 ; i < lista.size() ; i++){
+                            lstGrupos.add(lista.get(i).getDocumentId());
+                        }
+
+                        HashMap<String, List<Reservation>> lstItensGrupo = new HashMap<>();
+
+                        for (int i = 0 ; i < lista.size() ; i++){
+                            lstItensGrupo.put(lstGrupos.get(i), lista.subList(i, i+1));
+                        }
+
+                        AdapterListReservations adapter = new AdapterListReservations(getActivity(), lstGrupos, lstItensGrupo);
+
+                        listView.setAdapter(adapter);
+
+                    } else {
+                        Log.d("erro", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    public void populaListaTodasReservasBy(String status) {
+        List<Reservation> lista = new ArrayList<>();
+        db.collection("reservation")
+                .whereEqualTo("status", status)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Reservation reservation = new Reservation();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("room")) {
+                                        reservation.setRoom(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("date")) {
+                                        reservation.setDate(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("startTime")) {
+                                        reservation.setStartTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("endTime")) {
+                                        reservation.setEndTime(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("purpose")) {
+                                        reservation.setPurpose(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("status")) {
+                                        reservation.setStatus(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("situation")) {
+                                        reservation.setSituation(entryMap2.getValue().toString());
+                                    }
+                                    reservation.setDocumentId(entry.getKey());
+                                }
+                                lista.add(reservation);
+                            }
+                        }
+
+                        List<String> lstGrupos = new ArrayList<>();
+
+                        for (int i = 0 ; i < lista.size() ; i++){
+                            lstGrupos.add(lista.get(i).getDocumentId());
+                        }
+
+                        HashMap<String, List<Reservation>> lstItensGrupo = new HashMap<>();
+
+                        for (int i = 0 ; i < lista.size() ; i++){
+                            lstItensGrupo.put(lstGrupos.get(i), lista.subList(i, i+1));
+                        }
+
+                        AdapterListReservations adapter = new AdapterListReservations(getActivity(), lstGrupos, lstItensGrupo);
+
+                        listView.setAdapter(adapter);
+
+                    } else {
+                        Log.d("erro", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    public void populaListaBy(String status) {
+        List<Reservation> lista = new ArrayList<>();
+        db.collection("reservation")
+                .whereEqualTo("userId", user.getUid())
+                .whereEqualTo("status", status)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

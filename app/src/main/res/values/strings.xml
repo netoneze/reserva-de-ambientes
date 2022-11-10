@@ -54,4 +54,8 @@
     <string name="approve">Approve</string>
     <string name="disapprove">Disapprove</string>
     <string name="situation">Situation</string>
+    <string name="all">All</string>
+    <string name="pending">Pending</string>
+    <string name="approved">Approved</string>
+    <string name="disapproved">Disapproved</string>
 </resources>

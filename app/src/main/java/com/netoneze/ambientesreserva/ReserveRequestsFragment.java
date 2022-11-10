@@ -50,7 +50,6 @@ public class ReserveRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations_requests, container, false);
-        getActivity().setTitle("Reservation Requests");
         listView = root.findViewById(R.id.listViewReservationsRequests);
         responsibleRoomsList = new ArrayList<>();
         reservationList = new ArrayList<>();
@@ -59,6 +58,7 @@ public class ReserveRequestsFragment extends Fragment {
     }
 
     public void populaSalasResponsavel() {
+        responsibleRoomsList = new ArrayList<>();
         db.collection("room")
                 .whereEqualTo("responsibleUid", user.getUid())
                 .get()
@@ -100,6 +100,7 @@ public class ReserveRequestsFragment extends Fragment {
     }
 
     public void populaSalasResponsavelTodas() {
+        responsibleRoomsList = new ArrayList<>();
         db.collection("room")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -140,6 +141,7 @@ public class ReserveRequestsFragment extends Fragment {
     }
 
     public void populaReservas() {
+        reservationList = new ArrayList<>();
         for(Room room : responsibleRoomsList) {
             db.collection("reservation")
                     .whereEqualTo("room", room.getName())
@@ -191,6 +193,145 @@ public class ReserveRequestsFragment extends Fragment {
                     });
         }
 
+    }
+
+    public void populaSalasResponsavelBy(String status) {
+        responsibleRoomsList = new ArrayList<>();
+        db.collection("room")
+                .whereEqualTo("responsibleUid", user.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Room room = new Room();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("name")) {
+                                        room.setName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("aprovacaoAutomatica")) {
+                                        room.setAutomaticApproval(Integer.parseInt(entryMap2.getValue().toString()));
+                                    }
+                                    if (entryMap2.getKey().equals("type")) {
+                                        room.setType(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("especificacoes")) {
+                                        room.setSpecifications((Map<String, Boolean>) entryMap2.getValue());
+                                    }
+                                    if (entryMap2.getKey().equals("responsibleUid")) {
+                                        room.setResponsibleUid(entryMap2.getValue().toString());
+                                    }
+                                }
+                                responsibleRoomsList.add(room);
+                            }
+                        }
+                        populaReservasBy(status);
+                    } else {
+                        Log.d("erro", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    public void populaReservasBy(String status) {
+        reservationList = new ArrayList<>();
+        for(Room room : responsibleRoomsList) {
+            db.collection("reservation")
+                    .whereEqualTo("room", room.getName())
+                    .whereEqualTo("status", status)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                                documentMap.put(document.getId(), document.getData());
+
+                                for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                    Reservation reservation = new Reservation();
+                                    Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                    for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                        Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                        if (entryMap2.getKey().equals("room")) {
+                                            reservation.setRoom(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("date")) {
+                                            reservation.setDate(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("startTime")) {
+                                            reservation.setStartTime(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("endTime")) {
+                                            reservation.setEndTime(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("purpose")) {
+                                            reservation.setPurpose(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("status")) {
+                                            reservation.setStatus(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("username")) {
+                                            reservation.setUserName(entryMap2.getValue().toString());
+                                        }
+                                        if (entryMap2.getKey().equals("usertype")) {
+                                            reservation.setUsertype(entryMap2.getValue().toString());
+                                        }
+                                        reservation.setDocumentId(entry.getKey());
+                                    }
+                                    reservationList.add(reservation);
+                                }
+                            }
+                            populaLista(reservationList);
+                        } else {
+                            Log.d("erro", "Error getting documents: ", task.getException());
+                        }
+                    });
+        }
+
+    }
+
+    public void populaSalasResponsavelTodasBy(String status) {
+        responsibleRoomsList = new ArrayList<>();
+        db.collection("room")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Room room = new Room();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("name")) {
+                                        room.setName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("aprovacaoAutomatica")) {
+                                        room.setAutomaticApproval(Integer.parseInt(entryMap2.getValue().toString()));
+                                    }
+                                    if (entryMap2.getKey().equals("type")) {
+                                        room.setType(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("especificacoes")) {
+                                        room.setSpecifications((Map<String, Boolean>) entryMap2.getValue());
+                                    }
+                                    if (entryMap2.getKey().equals("responsibleUid")) {
+                                        room.setResponsibleUid(entryMap2.getValue().toString());
+                                    }
+                                }
+                                responsibleRoomsList.add(room);
+                            }
+                        }
+                        populaReservasBy(status);
+                    } else {
+                        Log.d("erro", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
     public void populaLista(List<Reservation> reservationList) {
