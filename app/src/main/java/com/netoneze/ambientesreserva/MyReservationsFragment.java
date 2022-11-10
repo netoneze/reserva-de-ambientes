@@ -2,17 +2,20 @@ package com.netoneze.ambientesreserva;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.os.Parcelable;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,10 +27,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.netoneze.ambientesreserva.modelo.Reservation;
 import com.netoneze.ambientesreserva.modelo.User;
 import com.netoneze.ambientesreserva.utils.AdapterListReservations;
+import com.netoneze.ambientesreserva.utils.UtilsGUI;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -52,6 +60,7 @@ public class MyReservationsFragment extends Fragment {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_reservations, container, false);
         listView = root.findViewById(R.id.listViewReservations);
+        registerForContextMenu(listView);
         addReserveButton = root.findViewById(R.id.addReserveButton);
         addReserveButton.setOnClickListener(v -> {
             Intent addReserveIntent = new Intent(getActivity(), ReserveFormActivity.class);
@@ -124,6 +133,12 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("situation")) {
                                         reservation.setSituation(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("username")) {
+                                        reservation.setUserName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("usertype")) {
+                                        reservation.setUsertype(entryMap2.getValue().toString());
+                                    }
                                     reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
@@ -187,6 +202,12 @@ public class MyReservationsFragment extends Fragment {
                                     }
                                     if (entryMap2.getKey().equals("situation")) {
                                         reservation.setSituation(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("username")) {
+                                        reservation.setUserName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("usertype")) {
+                                        reservation.setUsertype(entryMap2.getValue().toString());
                                     }
                                     reservation.setDocumentId(entry.getKey());
                                 }
@@ -252,6 +273,12 @@ public class MyReservationsFragment extends Fragment {
                                     }
                                     if (entryMap2.getKey().equals("situation")) {
                                         reservation.setSituation(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("username")) {
+                                        reservation.setUserName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("usertype")) {
+                                        reservation.setUsertype(entryMap2.getValue().toString());
                                     }
                                     reservation.setDocumentId(entry.getKey());
                                 }
@@ -319,6 +346,12 @@ public class MyReservationsFragment extends Fragment {
                                     if (entryMap2.getKey().equals("situation")) {
                                         reservation.setSituation(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("username")) {
+                                        reservation.setUserName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("usertype")) {
+                                        reservation.setUsertype(entryMap2.getValue().toString());
+                                    }
                                     reservation.setDocumentId(entry.getKey());
                                 }
                                 lista.add(reservation);
@@ -345,6 +378,98 @@ public class MyReservationsFragment extends Fragment {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }
                 });
+    }
+
+    private void cancelReservation(int posicao) {
+        Reservation reservation = (Reservation) listView.getExpandableListAdapter().getChild(posicao, 0);
+
+        String mensagem = getString(R.string.deseja_realmente_cancelar)
+                + "\n" + reservation.getRoom() + "?";
+
+        DialogInterface.OnClickListener listener =
+                (dialog, which) -> {
+
+                    switch(which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            if (reservation.getSituation().equals("cancelled")) {
+                                Toast.makeText(getContext(), "Cannot cancel a cancelled reserve!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
+                            Date todayDate = new Date();
+                            try {
+                                Date reservationDate = sdf.parse(reservation.getDate() + " " + reservation.getStartTime());
+                                assert reservationDate != null;
+                                if (reservationDate.before(todayDate)) {
+                                    Toast.makeText(getContext(), "Cannot cancel reserve, it already started or its finished!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            DocumentReference reserveRef = db.collection("reservation").document(reservation.getDocumentId());
+                            reserveRef.update("situation", "cancelled")
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("success", "DocumentSnapshot successfully updated!");
+                                        Toast.makeText(getContext(), "Cancelled Reserve!", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> Log.w("fail", "Error updating document", e));
+
+                            if (currentUser.getType().equals("2")) {
+                                populaListaTodasReservas();
+                            } else {
+                                populaLista();
+                            }
+
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+
+                            break;
+                    }
+                };
+
+        UtilsGUI.confirmaAcao(getContext(), mensagem, listener);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ExpandableListView.ExpandableListContextMenuInfo info;
+        info = (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+
+        int groupPos = 0;
+
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+        {
+            groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+        }
+
+        switch(item.getItemId()){
+
+            case R.id.excluir_menu_item_reservation:
+                cancelReservation(groupPos);
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+
+        ExpandableListView.ExpandableListContextMenuInfo info;
+
+        info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+            inflater.inflate(R.menu.menu_context_list_reservations, menu);
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     @Override

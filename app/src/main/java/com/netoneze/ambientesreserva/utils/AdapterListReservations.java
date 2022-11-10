@@ -96,7 +96,7 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
         if (reservation.getStatus().equals("pending")) {
             convertView.setBackgroundColor(Color.parseColor("#ccebff"));
         }
-        if (reservation.getStatus().equals("disapproved")) {
+        if (reservation.getStatus().equals("disapproved") || reservation.getSituation().equals("cancelled")) {
             convertView.setBackgroundColor(Color.parseColor("#ff8080"));
         }
 

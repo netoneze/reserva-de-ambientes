@@ -185,6 +185,18 @@ public class ReserveFormActivity extends AppCompatActivity {
                                     if (entryMap2.getKey().equals("purpose")) {
                                         reservation.setPurpose(entryMap2.getValue().toString());
                                     }
+                                    if (entryMap2.getKey().equals("status")) {
+                                        reservation.setStatus(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("situation")) {
+                                        reservation.setSituation(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("username")) {
+                                        reservation.setUserName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("usertype")) {
+                                        reservation.setUsertype(entryMap2.getValue().toString());
+                                    }
                                 }
                                 lista.add(reservation);
                             }
@@ -299,6 +311,9 @@ public class ReserveFormActivity extends AppCompatActivity {
         if (!lista.isEmpty()) {
             for (Reservation reserveItem : lista) {
                 try {
+                    if (reserveItem.getSituation().equals("cancelled")) {
+                        continue;
+                    }
                     Date listReservationDateStartTime = sdfTime.parse(reserveItem.getDate() +
                             " " +
                             reserveItem.getStartTime());

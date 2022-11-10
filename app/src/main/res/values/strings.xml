@@ -36,6 +36,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="deseja_realmente_apagar">Are you sure you want to delete</string>
+    <string name="deseja_realmente_cancelar">Cancel the reserve of room</string>
     <string name= "yes">Yes</string>
     <string name= "no">No</string>
     <string name= "confirmation">Confirm</string>
@@ -58,4 +59,5 @@
     <string name="pending">Pending</string>
     <string name="approved">Approved</string>
     <string name="disapproved">Disapproved</string>
+    <string name="cancel">Cancel</string>
 </resources>

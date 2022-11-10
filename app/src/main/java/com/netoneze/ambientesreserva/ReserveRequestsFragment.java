@@ -375,7 +375,7 @@ public class ReserveRequestsFragment extends Fragment {
                 if (currentUser.getType().equals("2")) {
                     populaSalasResponsavelTodas();
                 } else {
-                    populaSalasResponsavel();
+                    populaSalasResponsavelBy("pending");
                 }
             } else {
                 Log.d("failMessage", "get failed with ", task1.getException());
