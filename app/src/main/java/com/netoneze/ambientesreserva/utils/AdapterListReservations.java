@@ -90,6 +90,12 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
         String capitalizedStatus = reservation.getStatus().substring(0, 1).toUpperCase() + reservation.getStatus().substring(1);
         tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")");
 
+        String upperCasedSituation = "";
+        if (reservation.getSituation().equals("cancelled")) {
+            upperCasedSituation = reservation.getSituation().toUpperCase();
+            tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")" + " " + upperCasedSituation);
+        }
+
         if (reservation.getStatus().equals("approved")) {
             convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
         }
