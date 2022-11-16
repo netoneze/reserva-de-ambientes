@@ -496,15 +496,19 @@ public class MyReservationsFragment extends Fragment {
                     String channelId = "123123";
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
+                        if (getContext() == null) { return; }
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
 
+                        if (notificationManager.getNotificationChannel("123123") == null ) {
+                            return;
+                        }
+
                         int notifyId = (int) Math.random();
-                        boolean notifyBool = true;
+                        boolean notifyBool = false;
                         for (Reservation reservationFromList : lista) {
                             if (reservationFromList.getDocumentId().equals(reservationUpdated.getDocumentId()) &&
-                            reservationFromList.getStatus().equals(reservationUpdated.getStatus())) {
-                                notifyBool = false;
+                            !reservationFromList.getStatus().equals(reservationUpdated.getStatus())) {
+                                notifyBool = true;
                             }
                         }
                         if (notifyBool) {

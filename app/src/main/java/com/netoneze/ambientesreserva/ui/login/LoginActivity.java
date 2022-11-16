@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                 userType[0] = (Long) object.getValue();
                             }
                         }
-
+                        createNotificationChannel();
                         startActivity(intent);
                         setResult(Activity.RESULT_OK);
                         loadingProgressBar.setVisibility(View.GONE);
@@ -166,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }
                                         loadingProgressBar.setVisibility(View.GONE);
+                                        createNotificationChannel();
                                         startActivity(intent);
                                         setResult(Activity.RESULT_OK);
                                         passwordEditText.setText("");

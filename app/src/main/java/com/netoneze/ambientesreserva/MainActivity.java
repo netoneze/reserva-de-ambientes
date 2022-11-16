@@ -1,6 +1,8 @@
 package com.netoneze.ambientesreserva;
 
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,6 +111,13 @@ public class MainActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .signOut(this)
                         .addOnCompleteListener(task -> {
+                            NotificationManager notificationManager = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                notificationManager = getSystemService(NotificationManager.class);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    notificationManager.deleteNotificationChannel("123123");
+                                }
+                            }
                             Toast.makeText(this, "Logged out!", Toast.LENGTH_SHORT).show();
                         });
 
