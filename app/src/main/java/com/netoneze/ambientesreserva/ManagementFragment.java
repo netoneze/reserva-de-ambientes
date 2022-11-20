@@ -5,11 +5,6 @@ import static android.app.Activity.RESULT_OK;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,8 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ExpandableListView;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,11 +26,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.netoneze.ambientesreserva.modelo.Reservation;
 import com.netoneze.ambientesreserva.modelo.Room;
 import com.netoneze.ambientesreserva.modelo.User;
-import com.netoneze.ambientesreserva.utils.AdapterListReservations;
 import com.netoneze.ambientesreserva.utils.AdapterListRooms;
 import com.netoneze.ambientesreserva.utils.UtilsGUI;
 
@@ -53,10 +50,11 @@ public class ManagementFragment extends Fragment {
     ExpandableListView listView;
     FloatingActionButton addRoomButton;
     private User currentUser = new User();
-
+    List<Room> lista = new ArrayList<>();
     public static final String MODO = "MODO";
     public static final String ROOM = "ROOM";
     public static final int ALTERAR_CADASTRO = 1;
+    List<DocumentReference> documentReferences = new ArrayList<>();
     public ManagementFragment() {
         // Required empty public constructor
     }
@@ -73,11 +71,12 @@ public class ManagementFragment extends Fragment {
             startActivityForResult(addRoomIntent, 0);
         });
         populaUser();
+        populaListaAndSetListener();
         return root;
     }
 
     public void populaLista(){
-        List<Room> lista = new ArrayList<>();
+        lista = new ArrayList<>();
         db.collection("room")
                 .whereEqualTo("responsibleUid", user.getUid())
                 .get()
@@ -107,6 +106,7 @@ public class ManagementFragment extends Fragment {
                                     if (entryMap2.getKey().equals("responsibleUid")) {
                                         room.setResponsibleUid(entryMap2.getValue().toString());
                                     }
+                                    room.setDocumentId(entry.getKey());
                                 }
                                 lista.add(room);
                             }
@@ -135,7 +135,7 @@ public class ManagementFragment extends Fragment {
     }
 
     public void populaListaTodas(){
-        List<Room> lista = new ArrayList<>();
+        lista = new ArrayList<>();
         db.collection("room")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -164,6 +164,7 @@ public class ManagementFragment extends Fragment {
                                     if (entryMap2.getKey().equals("responsibleUid")) {
                                         room.setResponsibleUid(entryMap2.getValue().toString());
                                     }
+                                    room.setDocumentId(entry.getKey());
                                 }
                                 lista.add(room);
                             }
@@ -265,6 +266,117 @@ public class ManagementFragment extends Fragment {
                 populaListaTodas();
             }
         });
+    }
+
+    public void populaListaAndSetListener() {
+        List<Room> listaForListener = new ArrayList<>();
+        db.collection("room")
+                .whereEqualTo("responsibleUid", user.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                            documentMap.put(document.getId(), document.getData());
+
+                            for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                                Room room = new Room();
+                                Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                                for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                                    Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                    if (entryMap2.getKey().equals("name")) {
+                                        room.setName(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("aprovacaoAutomatica")) {
+                                        room.setAutomaticApproval(Integer.parseInt(entryMap2.getValue().toString()));
+                                    }
+                                    if (entryMap2.getKey().equals("type")) {
+                                        room.setType(entryMap2.getValue().toString());
+                                    }
+                                    if (entryMap2.getKey().equals("especificacoes")) {
+                                        room.setSpecifications((Map<String, Boolean>) entryMap2.getValue());
+                                    }
+                                    if (entryMap2.getKey().equals("responsibleUid")) {
+                                        room.setResponsibleUid(entryMap2.getValue().toString());
+                                    }
+                                    room.setDocumentId(entry.getKey());
+                                }
+                                listaForListener.add(room);
+                            }
+                        }
+
+                        setListenerForMyRooms(listaForListener);
+                });
+    }
+
+    public void setListenerForMyRooms(List<Room> listaRooms) {
+        for (Room room : listaRooms) {
+            final DocumentReference docRef = db.collection("room").document(room.getDocumentId());
+            docRef.addSnapshotListener(MetadataChanges.INCLUDE, (snapshot, e) -> {
+                if (e != null) {
+                    Log.w("listener", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("listener", "Current data: " + snapshot.getData());
+                    HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                    documentMap.put(snapshot.getId(), snapshot.getData());
+                    Room roomUpdated = new Room();
+                    for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                        Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                        for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                            Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                            if (entryMap2.getKey().equals("name")) {
+                                roomUpdated.setName(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("aprovacaoAutomatica")) {
+                                roomUpdated.setAutomaticApproval(Integer.parseInt(entryMap2.getValue().toString()));
+                            }
+                            if (entryMap2.getKey().equals("type")) {
+                                roomUpdated.setType(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("especificacoes")) {
+                                roomUpdated.setSpecifications((Map<String, Boolean>) entryMap2.getValue());
+                            }
+                            if (entryMap2.getKey().equals("responsibleUid")) {
+                                roomUpdated.setResponsibleUid(entryMap2.getValue().toString());
+                            }
+                            roomUpdated.setDocumentId(entry.getKey());
+                        }
+                    }
+
+
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        if (getContext() == null) { return; }
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+
+                        if (notificationManager.getNotificationChannel("123123") == null ) {
+                            return;
+                        }
+
+                        boolean notifyBool = false;
+                        for (Room roomFromList : lista) {
+                            if (roomFromList.getDocumentId().equals(roomUpdated.getDocumentId()) &&
+                                    (!roomFromList.getName().equals(roomUpdated.getName()) ||
+                                            !roomFromList.getResponsibleUid().equals(roomUpdated.getResponsibleUid()) ||
+                                            !roomFromList.getType().equals(roomUpdated.getType()) ||
+                                            !roomFromList.getAutomaticApproval().equals(roomUpdated.getAutomaticApproval()))
+                                    ) {
+                                notifyBool = true;
+                            }
+                        }
+                        if (notifyBool) {
+
+                            populaUser();
+                        }
+                    }
+                } else {
+                    Log.d("listener", "Current data: null");
+                }
+            });
+            documentReferences.add(docRef);
+        }
     }
 
     @Override

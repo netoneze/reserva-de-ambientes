@@ -1,6 +1,5 @@
 package com.netoneze.ambientesreserva.modelo;
 
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,13 +12,15 @@ public class Room implements Parcelable {
     private String name;
     private String responsibleUid;
     private String type;
+    private String documentId;
 
-    public Room(Integer automaticApproval, Map<String, Boolean> specifications, String name, String responsibleUid, String type) {
+    public Room(Integer automaticApproval, Map<String, Boolean> specifications, String name, String responsibleUid, String type, String documentId) {
         this.automaticApproval = automaticApproval;
         this.specifications = specifications;
         this.name = name;
         this.responsibleUid = responsibleUid;
         this.type = type;
+        this.documentId = documentId;
     }
 
     public Room() {
@@ -33,6 +34,7 @@ public class Room implements Parcelable {
         this.name = in.readString();
         this.responsibleUid = in.readString();
         this.type = in.readString();
+        this.documentId = in.readString();
     }
 
     public Integer getAutomaticApproval() {
@@ -75,6 +77,12 @@ public class Room implements Parcelable {
         this.type = type;
     }
 
+    public String getDocumentId() { return documentId; }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -87,6 +95,7 @@ public class Room implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(responsibleUid);
         parcel.writeString(type);
+        parcel.writeString(documentId);
     }
     public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>(){
 

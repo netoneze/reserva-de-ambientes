@@ -507,7 +507,9 @@ public class MyReservationsFragment extends Fragment {
                         boolean notifyBool = false;
                         for (Reservation reservationFromList : lista) {
                             if (reservationFromList.getDocumentId().equals(reservationUpdated.getDocumentId()) &&
-                            !reservationFromList.getStatus().equals(reservationUpdated.getStatus())) {
+                                    (!reservationFromList.getStatus().equals(reservationUpdated.getStatus()) ||
+                                            !reservationFromList.getSituation().equals(reservationUpdated.getSituation()) )
+                            ) {
                                 notifyBool = true;
                             }
                         }
@@ -519,6 +521,7 @@ public class MyReservationsFragment extends Fragment {
                                     .build();
 
                             notificationManager.notify(notifyId, notification);
+                            populaUser();
                         }
                     }
                 } else {

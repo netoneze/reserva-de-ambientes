@@ -2,6 +2,7 @@ package com.netoneze.ambientesreserva;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.netoneze.ambientesreserva.modelo.Reservation;
 import com.netoneze.ambientesreserva.modelo.Room;
@@ -41,6 +44,8 @@ public class ReserveRequestsFragment extends Fragment {
     ArrayList<Room> responsibleRoomsList = new ArrayList<>();
     List<Reservation> reservationList = new ArrayList<>();
     private User currentUser = new User();
+    List<DocumentReference> documentReferences = new ArrayList<>();
+    public String activeFilter = "";
     public ReserveRequestsFragment() {
         // Required empty public constructor
     }
@@ -54,6 +59,7 @@ public class ReserveRequestsFragment extends Fragment {
         responsibleRoomsList = new ArrayList<>();
         reservationList = new ArrayList<>();
         populaUser();
+//        populaListaAndSetListener();
         return root;
     }
 
@@ -181,11 +187,15 @@ public class ReserveRequestsFragment extends Fragment {
                                         if (entryMap2.getKey().equals("usertype")) {
                                             reservation.setUsertype(entryMap2.getValue().toString());
                                         }
+                                        if (entryMap2.getKey().equals("situation")) {
+                                            reservation.setSituation(entryMap2.getValue().toString());
+                                        }
                                         reservation.setDocumentId(entry.getKey());
                                     }
                                     reservationList.add(reservation);
                                 }
                             }
+                            setListenerForMyReservationsRequests(reservationList);
                             populaLista(reservationList);
                         } else {
                             Log.d("erro", "Error getting documents: ", task.getException());
@@ -279,11 +289,15 @@ public class ReserveRequestsFragment extends Fragment {
                                         if (entryMap2.getKey().equals("usertype")) {
                                             reservation.setUsertype(entryMap2.getValue().toString());
                                         }
+                                        if (entryMap2.getKey().equals("situation")) {
+                                            reservation.setSituation(entryMap2.getValue().toString());
+                                        }
                                         reservation.setDocumentId(entry.getKey());
                                     }
                                     reservationList.add(reservation);
                                 }
                             }
+                            setListenerForMyReservationsRequests(reservationList);
                             populaLista(reservationList);
                         } else {
                             Log.d("erro", "Error getting documents: ", task.getException());
@@ -381,6 +395,108 @@ public class ReserveRequestsFragment extends Fragment {
                 Log.d("failMessage", "get failed with ", task1.getException());
             }
         });
+    }
+
+    public void setListenerForMyReservationsRequests(List<Reservation> listaReservations) {
+        for (Reservation reservation : listaReservations) {
+            final DocumentReference docRef = db.collection("reservation").document(reservation.getDocumentId());
+            docRef.addSnapshotListener(MetadataChanges.INCLUDE, (snapshot, e) -> {
+                if (e != null) {
+                    Log.w("listener", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("listener", "Current data: " + snapshot.getData());
+                    HashMap<String, Map<String, Object>> documentMap = new HashMap<>();
+                    documentMap.put(snapshot.getId(), snapshot.getData());
+                    Reservation reservationUpdated = new Reservation();
+                    for (Map.Entry<String, Map<String, Object>> entry : documentMap.entrySet()) {
+                        Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
+                        for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
+                            Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                            if (entryMap2.getKey().equals("room")) {
+                                reservationUpdated.setRoom(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("date")) {
+                                reservationUpdated.setDate(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("startTime")) {
+                                reservationUpdated.setStartTime(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("endTime")) {
+                                reservationUpdated.setEndTime(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("purpose")) {
+                                reservationUpdated.setPurpose(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("status")) {
+                                reservationUpdated.setStatus(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("situation")) {
+                                reservationUpdated.setSituation(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("username")) {
+                                reservationUpdated.setUserName(entryMap2.getValue().toString());
+                            }
+                            if (entryMap2.getKey().equals("usertype")) {
+                                reservationUpdated.setUsertype(entryMap2.getValue().toString());
+                            }
+                            reservationUpdated.setDocumentId(entry.getKey());
+                        }
+                    }
+
+                    String channelId = "123123";
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        if (getContext() == null) { return; }
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+
+                        if (notificationManager.getNotificationChannel("123123") == null ) {
+                            return;
+                        }
+
+                        int notifyId = (int) Math.random();
+                        boolean notifyBool = false;
+                        boolean atualizaBool = false;
+                        for (Reservation reservationFromList : listaReservations) {
+                            if (reservationFromList.getDocumentId().equals(reservationUpdated.getDocumentId()) &&
+                                    !reservationFromList.getSituation().equals(reservationUpdated.getSituation())) {
+                                notifyBool = true;
+                            }
+                            if (reservationFromList.getDocumentId().equals(reservationUpdated.getDocumentId()) &&
+                                    (!reservationFromList.getStatus().equals(reservationUpdated.getStatus()) ||
+                                            !reservationFromList.getStartTime().equals(reservationUpdated.getStartTime()) ||
+                                            !reservationFromList.getEndTime().equals(reservationUpdated.getEndTime()) ||
+                                            !reservationFromList.getDate().equals(reservationUpdated.getDate()) ||
+                                            !reservationFromList.getPurpose().equals(reservationUpdated.getPurpose()) ||
+                                            !reservationFromList.getUsertype().equals(reservationUpdated.getUsertype()) ||
+                                            !reservationFromList.getRoom().equals(reservationUpdated.getRoom()) ||
+                                            !reservationFromList.getUserName().equals(reservationUpdated.getUserName()))
+                            ) {
+                                atualizaBool = true;
+                            }
+                        }
+                        if (notifyBool) {
+                            Notification notification = new Notification.Builder(getContext(), channelId)
+                                    .setContentTitle("Your Reservation Request Situation Changed!")
+                                    .setContentText("The situation of the reservation of room " + reservationUpdated.getRoom() + " changed to " + reservationUpdated.getSituation())
+                                    .setSmallIcon(android.R.drawable.stat_notify_chat)
+                                    .build();
+
+                            notificationManager.notify(notifyId, notification);
+                            populaUser();
+                        }
+                        if (atualizaBool) {
+                            populaUser();
+                        }
+                    }
+                } else {
+                    Log.d("listener", "Current data: null");
+                }
+            });
+            documentReferences.add(docRef);
+        }
     }
 
     @Override
