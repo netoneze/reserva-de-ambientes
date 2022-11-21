@@ -113,4 +113,6 @@
     <string name="select_an_automatic_approval">Select an automatic approval type!</string>
     <string name="select_a_responsible">Select a responsible!</string>
     <string name="saved_room">Saved room!</string>
+    <string name="refresh">Refresh</string>
+    <string name="refreshed">Refreshed!</string>
 </resources>

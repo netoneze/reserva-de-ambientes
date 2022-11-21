@@ -2,6 +2,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/refresh"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/logout_menu"
         android:icon="@drawable/logout_48px"
         android:title="@string/logout"

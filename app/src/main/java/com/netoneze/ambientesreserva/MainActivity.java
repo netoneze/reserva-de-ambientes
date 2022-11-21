@@ -107,6 +107,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.refresh:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    fm.beginTransaction().detach(active).commitNow();
+                    fm.beginTransaction().attach(active).commitNow();
+                    Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
+                } else {
+                    fm.beginTransaction().detach(active).attach(active).commit();
+                    Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.logout_menu:
                 AuthUI.getInstance()
                         .signOut(this)
