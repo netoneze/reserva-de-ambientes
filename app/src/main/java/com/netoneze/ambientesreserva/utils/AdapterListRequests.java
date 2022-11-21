@@ -2,6 +2,7 @@ package com.netoneze.ambientesreserva.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.netoneze.ambientesreserva.MainActivity;
 import com.netoneze.ambientesreserva.R;
 import com.netoneze.ambientesreserva.modelo.Reservation;
 
@@ -179,6 +183,15 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
                         .update("status", "approved")
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
+                                MainActivity mainActivity = (MainActivity) this.context;
+                                Fragment frg = null;
+                                frg = mainActivity.getSupportFragmentManager().findFragmentByTag("3");
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).commitNow();
+                                    mainActivity.getSupportFragmentManager().beginTransaction().attach(frg).commitNow();
+                                } else {
+                                    mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).attach(frg).commit();
+                                }
                                 Toast.makeText(finalConvertView.getContext(), R.string.reservation_approved, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -192,6 +205,15 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
                         .update("status", "disapproved")
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
+                                MainActivity mainActivity = (MainActivity) this.context;
+                                Fragment frg = null;
+                                frg = mainActivity.getSupportFragmentManager().findFragmentByTag("3");
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).commitNow();
+                                    mainActivity.getSupportFragmentManager().beginTransaction().attach(frg).commitNow();
+                                } else {
+                                    mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).attach(frg).commit();
+                                }
                                 Toast.makeText(finalConvertView.getContext(), R.string.reservation_disapproved, Toast.LENGTH_SHORT).show();
                             }
                         });
