@@ -87,23 +87,32 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
 
         Reservation reservation = (Reservation) getChild(groupPosition, 0);
 
-        String capitalizedStatus = reservation.getStatus().substring(0, 1).toUpperCase() + reservation.getStatus().substring(1);
+        Reservation reservationTranslated = new Reservation();
+
+        if (reservation.getStatus().equals("approved")) {
+            convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
+            reservationTranslated.setStatus(context.getString(R.string.approved));
+        }
+        if (reservation.getStatus().equals("pending")) {
+            convertView.setBackgroundColor(Color.parseColor("#ccebff"));
+            reservationTranslated.setStatus(context.getString(R.string.pending));
+        }
+        if (reservation.getStatus().equals("disapproved")) {
+            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+            reservationTranslated.setStatus(context.getString(R.string.disapproved));
+        }
+        if (reservation.getSituation().equals("cancelled")) {
+            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+            reservationTranslated.setSituation(context.getString(R.string.cancelled));
+        }
+
+        String capitalizedStatus = reservationTranslated.getStatus().substring(0, 1).toUpperCase() + reservationTranslated.getStatus().substring(1);
         tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")");
 
         String upperCasedSituation = "";
         if (reservation.getSituation().equals("cancelled")) {
-            upperCasedSituation = reservation.getSituation().toUpperCase();
+            upperCasedSituation = reservationTranslated.getSituation().toUpperCase();
             tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")" + " " + upperCasedSituation);
-        }
-
-        if (reservation.getStatus().equals("approved")) {
-            convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
-        }
-        if (reservation.getStatus().equals("pending")) {
-            convertView.setBackgroundColor(Color.parseColor("#ccebff"));
-        }
-        if (reservation.getStatus().equals("disapproved") || reservation.getSituation().equals("cancelled")) {
-            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
         }
 
         return convertView;
@@ -127,11 +136,25 @@ public class AdapterListReservations extends BaseExpandableListAdapter {
 
         Reservation reservation = (Reservation) getChild(groupPosition, childPosition);
 
+        Reservation reservationTranslated = new Reservation();
+
+        switch (reservation.getSituation()) {
+            case "active":
+                reservationTranslated.setSituation(context.getString(R.string.active));
+                break;
+            case "cancelled":
+                reservationTranslated.setSituation(context.getString(R.string.cancelled));
+                break;
+            default:
+                reservationTranslated.setSituation(reservation.getSituation());
+                break;
+        }
+
         tfDate.setText(reservation.getDate());
         tfStartTime.setText(reservation.getStartTime());
         tfEndTime.setText(reservation.getEndTime());
         tfPurpose.setText(reservation.getPurpose());
-        tfSituation.setText(reservation.getSituation());
+        tfSituation.setText(reservationTranslated.getSituation());
 
         return convertView;
     }

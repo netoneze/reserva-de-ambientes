@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Ambient Reservation");
+        setTitle(getString(R.string.title_activity_login));
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         fm.beginTransaction().add(R.id.fragment_container_view, fragment3, "3").hide(fragment3).commit();
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             currentUser.setUsername(user.getDisplayName());
         }
-        setTitle("My Reservations");
+        setTitle(getString(R.string.my_reservations_title));
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && user != null) {
@@ -78,17 +78,17 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.my_reserve:
                     fm.beginTransaction().hide(active).show(fragment1).commit();
-                    setTitle("My Reservations");
+                    setTitle(getString(R.string.my_reservations_title));
                     active = fragment1;
                     return true;
                 case R.id.management_page:
                     fm.beginTransaction().hide(active).show(fragment2).commit();
-                    setTitle("Room Management");
+                    setTitle(getString(R.string.room_management_title));
                     active = fragment2;
                     return true;
                 case R.id.reservation_requests:
                     fm.beginTransaction().hide(active).show(fragment3).commit();
-                    setTitle("Reservation Requests");
+                    setTitle(getString(R.string.reservation_requests_title));
                     active = fragment3;
                     return true;
             }
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                                     notificationManager.deleteNotificationChannel("123123");
                                 }
                             }
-                            Toast.makeText(this, "Logged out!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
                         });
 
                 navigateUpTo(new Intent(getBaseContext(), MainActivity.class));
@@ -127,21 +127,21 @@ public class MainActivity extends AppCompatActivity {
                 if (active == fragment1) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaLista();
-                        Toast.makeText(this, "Listing ALL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Listing ALL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservas();
                     }
                 }
                 if (active == fragment2) {
-                    Toast.makeText(this, "Nothing to filter!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.nothing_to_filter, Toast.LENGTH_SHORT).show();
                 }
                 if (active == fragment3) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavel();
-                        Toast.makeText(this, "Listing ALL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Listing ALL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
 
                         fragment3.populaSalasResponsavelTodas();
                     }
@@ -151,22 +151,22 @@ public class MainActivity extends AppCompatActivity {
                 if (active == fragment1) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaListaBy("pending");
-                        Toast.makeText(this, "Listing PENDING", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Listing PENDING", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservasBy("pending");
                     }
                 }
                 if (active == fragment2) {
-                    Toast.makeText(this, "Nothing to filter!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.nothing_to_filter, Toast.LENGTH_SHORT).show();
                 }
                 if (active == fragment3) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavelBy("pending");
-                        Toast.makeText(this, "Listing PENDING", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
                     } else {
                         fragment3.populaSalasResponsavelTodasBy("pending");
-                        Toast.makeText(this, "Listing PENDING", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -174,44 +174,44 @@ public class MainActivity extends AppCompatActivity {
                 if (active == fragment1) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaListaBy("approved");
-                        Toast.makeText(this, "Listing APPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Listing APPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservasBy("approved");
                     }
                 }
                 if (active == fragment2) {
-                    Toast.makeText(this, "Nothing to filter!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.nothing_to_filter, Toast.LENGTH_SHORT).show();
                 }
                 if (active == fragment3) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavelBy("approved");
-                        Toast.makeText(this, "Listing APPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
                     } else {
                         fragment3.populaSalasResponsavelTodasBy("approved");
-                        Toast.makeText(this, "Listing APPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
             case R.id.filter_disapproved:
                 if (active == fragment1) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
-                        Toast.makeText(this, "Listing DISAPPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaBy("disapproved");
                     } else {
                         fragment1.populaListaTodasReservasBy("disapproved");
-                        Toast.makeText(this, "Listing DISAPPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (active == fragment2) {
-                    Toast.makeText(this, "Nothing to filter!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.nothing_to_filter, Toast.LENGTH_SHORT).show();
                 }
                 if (active == fragment3) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
-                        Toast.makeText(this, "Listing DISAPPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                         fragment3.populaSalasResponsavelBy("disapproved");
                     } else {
-                        Toast.makeText(this, "Listing DISAPPROVED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                         fragment3.populaSalasResponsavelTodasBy("disapproved");
                     }
                 }

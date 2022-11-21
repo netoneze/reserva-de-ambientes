@@ -49,7 +49,7 @@ public class ReserveFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
-        setTitle("Create a Reservation");
+        setTitle(getString(R.string.create_a_reservation));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Reserve fields
         spinnerRooms = findViewById(R.id.spinnerRoom);
@@ -93,7 +93,7 @@ public class ReserveFormActivity extends AppCompatActivity {
     private void beginSaveReserve() {
         //Validation
         if (spinnerRooms.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Select a room!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.select_a_room, Toast.LENGTH_SHORT).show();
             return;
         }
         if (editTextDate.getText().toString().equals("") ||
@@ -101,7 +101,7 @@ public class ReserveFormActivity extends AppCompatActivity {
                 editTextEndTime.getText().toString().equals("") ||
                 editTextPurpose.getText().toString().equals("")
         ) {
-            Toast.makeText(this, "Fill all the fields!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.fill_all_field, Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -111,15 +111,15 @@ public class ReserveFormActivity extends AppCompatActivity {
 
             assert reservationDate != null;
             if (reservationDate.before(todayDate)) {
-                Toast.makeText(this, "Incorrect date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.incorrect_date, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (Integer.parseInt(editTextStartTime.getText().toString()) < 0) {
-                Toast.makeText(this, "Incorrect StartTime", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.incorrect_starttime, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (Integer.parseInt(editTextEndTime.getText().toString()) < 0) {
-                Toast.makeText(this, "Incorrect EndTime", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.incorrect_endtime, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -266,7 +266,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         editTextEndTime.setText("");
         editTextPurpose.setText("");
         spinnerRooms.setSelection(0);
-        Toast.makeText(this, "Cleaned fields!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.cleaned_fields, Toast.LENGTH_SHORT).show();
     }
 
     public void verifyReserveTime(List<Reservation> lista, Map <String, Object> reserve) {
@@ -286,22 +286,22 @@ public class ReserveFormActivity extends AppCompatActivity {
             myReservationDateEndTimeLimit = sdfTime.parse(editTextDate.getText().toString() + " " + "23:00");
 
             if (myReservationDateStartTime.before(myReservationDateStartTimeLimit)) {
-                Toast.makeText(this, "The start time must be equal or after 7:00", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.starttime_after_7, Toast.LENGTH_SHORT).show();
                 return;
             } else if (myReservationDateEndTime.after(myReservationDateEndTimeLimit)) {
-                Toast.makeText(this, "The end time must be equal or before 23:00", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.endtime_before_23, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             long difference_In_Time = myReservationDateEndTime.getTime() - myReservationDateStartTime.getTime();
             long difference_In_Hours = TimeUnit.MILLISECONDS.toHours(difference_In_Time) % 24;
             if (difference_In_Hours == 0) {
-                Toast.makeText(this, "The reservation must have at least 60 minutes!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.reservation_must_have_60minutes, Toast.LENGTH_SHORT).show();
                 return;
             }
             assert myReservationDateEndTime != null;
             if (myReservationDateEndTime.before(myReservationDateStartTime)) {
-                Toast.makeText(this, "The end date must be after the start date!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.enddate_must_be_after_startdate, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -345,7 +345,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         if (saveReservation) {
             saveReserve(reserve);
         } else {
-            Toast.makeText(this, "There already is a reservation at this date/time!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.there_is_already_a_reservation, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,7 +353,7 @@ public class ReserveFormActivity extends AppCompatActivity {
         db.collection("reservation")
                 .add(reserve)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(getApplicationContext(), "Saved reserve!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.saved_reserve, Toast.LENGTH_SHORT).show();
                     Intent intentListagem = new Intent(this, ManagementFragment.class);
                     setResult(Activity.RESULT_OK, intentListagem);
                     finish();

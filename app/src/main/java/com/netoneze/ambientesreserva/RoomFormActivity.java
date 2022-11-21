@@ -33,8 +33,10 @@ public class RoomFormActivity extends AppCompatActivity {
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText nameEditText;
     private Spinner typeSpinner, responsibleSpinner;
-    private RadioGroup responsibleRadioGroup, automaticApprovalRadioGroup;
-    private RadioButton responsibleRadioButtonNo, responsibleRadioButtonYes, automaticApprovalOnlyFederalRadioButton, automaticApprovalEveryoneRadioButton, automaticApprovalNobodyRadioButton;
+    private RadioGroup automaticApprovalRadioGroup;
+    private RadioButton automaticApprovalOnlyFederalRadioButton;
+    private RadioButton automaticApprovalEveryoneRadioButton;
+    private RadioButton automaticApprovalNobodyRadioButton;
     private CheckBox chkBoxNeedsKey, chkBoxHasAirConditioner, chkBoxHasNetworkPoint, chxBoxHasProjector, chxBoxHasTV;
     private Integer automaticApproval;
     private ArrayList<User> listaUsers = new ArrayList<>();
@@ -45,7 +47,7 @@ public class RoomFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_room_form);
         bundle = getIntent().getExtras();
 
-        setTitle("Create a Room");
+        setTitle(getString(R.string.create_a_room));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         nameEditText = findViewById(R.id.editTextRoomName);
         typeSpinner = findViewById(R.id.spinnerRoomType);
@@ -140,22 +142,22 @@ public class RoomFormActivity extends AppCompatActivity {
     private void beginSaveRoom() {
         //Validation
         if (nameEditText.getText().toString().equals("")) {
-            Toast.makeText(this, "The room must have a Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.the_room_must_have_a_name, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (typeSpinner.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Select a type!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.select_a_type, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (automaticApprovalRadioGroup.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Select an automatic approval type!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.select_an_automatic_approval, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (responsibleSpinner.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Select a responsible!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.select_a_responsible, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -197,7 +199,7 @@ public class RoomFormActivity extends AppCompatActivity {
         db.collection("room").document(roomName)
                 .set(room)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(getApplicationContext(), "Saved room!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.saved_room, Toast.LENGTH_SHORT).show();
                     Intent intentListagem = new Intent(this, ManagementFragment.class);
                     setResult(Activity.RESULT_OK, intentListagem);
                     finish();
@@ -300,7 +302,7 @@ public class RoomFormActivity extends AppCompatActivity {
         chxBoxHasProjector.setChecked(false);
         chxBoxHasTV.setChecked(false);
         automaticApprovalRadioGroup.clearCheck();
-        Toast.makeText(getApplicationContext(), "Cleaned fields!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.cleaned_fields), Toast.LENGTH_SHORT).show();
     }
 
     @Override

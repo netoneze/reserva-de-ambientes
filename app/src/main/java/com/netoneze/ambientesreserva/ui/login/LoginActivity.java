@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.netoneze.ambientesreserva.MainActivity;
+import com.netoneze.ambientesreserva.R;
 import com.netoneze.ambientesreserva.databinding.ActivityLoginBinding;
 
 import java.util.Map;
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle("Ambient Reservation");
+        setTitle(getString(R.string.login_activity_title));
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
@@ -181,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("login", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Login falhou!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.failed_login, Toast.LENGTH_SHORT).show();
                             loadingProgressBar.setVisibility(View.GONE);
                         }
                     });
@@ -193,8 +194,8 @@ public class LoginActivity extends AppCompatActivity {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Ambient Reservation";
-            String description = "Status Notifications";
+            CharSequence name = getString(R.string.login_activity_title);
+            String description = getString(R.string.notification_status);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("123123", name, importance);
             channel.setDescription(description);

@@ -514,9 +514,23 @@ public class MyReservationsFragment extends Fragment {
                             }
                         }
                         if (notifyBool) {
+                            switch (reservationUpdated.getStatus()) {
+                                case "pending":
+                                    reservationUpdated.setStatus(getString(R.string.pending));
+                                    break;
+                                case "approved":
+                                    reservationUpdated.setStatus(getString(R.string.approved));
+                                    break;
+                                case "disapproved":
+                                    reservationUpdated.setStatus(getString(R.string.disapproved));
+                                    break;
+                                default:
+                                    break;
+                            }
+
                             Notification notification = new Notification.Builder(getContext(), channelId)
-                                    .setContentTitle("Your Reservation Status Changed!")
-                                    .setContentText("The reservation of room " + reservationUpdated.getRoom() + " changed to " + reservationUpdated.getStatus())
+                                    .setContentTitle(getString(R.string.your_reservation_status_changed))
+                                    .setContentText(getString(R.string.the_reservation_of_room) + reservationUpdated.getRoom() + getString(R.string.changed_to) + reservationUpdated.getStatus())
                                     .setSmallIcon(android.R.drawable.stat_notify_chat)
                                     .build();
 
@@ -544,7 +558,7 @@ public class MyReservationsFragment extends Fragment {
                     switch(which){
                         case DialogInterface.BUTTON_POSITIVE:
                             if (reservation.getSituation().equals("cancelled")) {
-                                Toast.makeText(getContext(), "Cannot cancel a cancelled reserve!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.cannot_cancel_cancelled_reserve, Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
@@ -553,7 +567,7 @@ public class MyReservationsFragment extends Fragment {
                                 Date reservationDate = sdf.parse(reservation.getDate() + " " + reservation.getStartTime());
                                 assert reservationDate != null;
                                 if (reservationDate.before(todayDate)) {
-                                    Toast.makeText(getContext(), "Cannot cancel reserve, it already started or its finished!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.cannot_cancel_alreadystarted_ended_reserve, Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                             } catch (ParseException e) {
@@ -564,7 +578,7 @@ public class MyReservationsFragment extends Fragment {
                             reserveRef.update("situation", "cancelled")
                                     .addOnSuccessListener(aVoid -> {
                                         Log.d("success", "DocumentSnapshot successfully updated!");
-                                        Toast.makeText(getContext(), "Cancelled Reserve!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.cancelled_reserve, Toast.LENGTH_SHORT).show();
                                     })
                                     .addOnFailureListener(e -> Log.w("fail", "Error updating document", e));
 

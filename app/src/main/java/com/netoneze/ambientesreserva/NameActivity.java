@@ -24,14 +24,14 @@ public class NameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_username);
 
-        setTitle("Enter your Name");
+        setTitle(getString(R.string.enter_your_name));
 
         editTextName = findViewById(R.id.editTextNamePerson);
     }
 
     public void saveUsername() {
         if (editTextName.equals("") || editTextName.equals(null)) {
-            Toast.makeText(this, "Name is empty!", Toast.LENGTH_SHORT);
+            Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT);
         }
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()

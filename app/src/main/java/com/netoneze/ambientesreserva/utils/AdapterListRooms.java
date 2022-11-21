@@ -115,27 +115,27 @@ public class AdapterListRooms extends BaseExpandableListAdapter {
             switch (entry.getKey()) {
                 case "necessita_chave":
                     if (entry.getValue()) {
-                        specificationsText.append(" Necessita chave,");
+                        specificationsText.append(context.getString(R.string.needs_key));
                     }
                     break;
                 case "possui_ar_condicionado":
                     if (entry.getValue()) {
-                        specificationsText.append(" Possui ar-condicionado,");
+                        specificationsText.append(context.getString(R.string.has_air_conditioner));
                     }
                     break;
                 case "possui_ponto_rede_habilitado":
                     if (entry.getValue()) {
-                        specificationsText.append(" Possui ponto de rede,");
+                        specificationsText.append(context.getString(R.string.has_network));
                     }
                     break;
                 case "possui_projetor":
                     if (entry.getValue()) {
-                        specificationsText.append(" Possui projetor,");
+                        specificationsText.append(context.getString(R.string.has_projector));
                     }
                     break;
                 case "possui_tv":
                     if (entry.getValue()) {
-                        specificationsText.append(" Possui TV,");
+                        specificationsText.append(context.getString(R.string.has_tv));
                     }
                     break;
                 default:

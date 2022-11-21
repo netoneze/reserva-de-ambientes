@@ -91,26 +91,32 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
 
         Reservation reservation = (Reservation) getChild(groupPosition, 0);
 
-        String capitalizedStatus = reservation.getStatus().substring(0, 1).toUpperCase() + reservation.getStatus().substring(1);
+        Reservation reservationTranslated = new Reservation();
+
+        if (reservation.getStatus().equals("approved")) {
+            convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
+            reservationTranslated.setStatus(context.getString(R.string.approved));
+        }
+        if (reservation.getStatus().equals("pending")) {
+            convertView.setBackgroundColor(Color.parseColor("#ccebff"));
+            reservationTranslated.setStatus(context.getString(R.string.pending));
+        }
+        if (reservation.getStatus().equals("disapproved")) {
+            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+            reservationTranslated.setStatus(context.getString(R.string.disapproved));
+        }
+        if (reservation.getSituation().equals("cancelled")) {
+            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+            reservationTranslated.setSituation(context.getString(R.string.cancelled));
+        }
+
+        String capitalizedStatus = reservationTranslated.getStatus().substring(0, 1).toUpperCase() + reservationTranslated.getStatus().substring(1);
         tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")");
 
         String upperCasedSituation = "";
         if (reservation.getSituation().equals("cancelled")) {
-            upperCasedSituation = reservation.getSituation().toUpperCase();
+            upperCasedSituation = reservationTranslated.getSituation().toUpperCase();
             tfTitulo.setText(reservation.getRoom() + " (" + capitalizedStatus + ")" + " " + upperCasedSituation);
-        }
-
-        if (reservation.getStatus().equals("approved")) {
-            convertView.setBackgroundColor(Color.parseColor("#b3ffcc"));
-        }
-        if (reservation.getStatus().equals("pending")) {
-            convertView.setBackgroundColor(Color.parseColor("#ccebff"));
-        }
-        if (reservation.getStatus().equals("disapproved")) {
-            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
-        }
-        if (reservation.getStatus().equals("disapproved") || reservation.getSituation().equals("cancelled")) {
-            convertView.setBackgroundColor(Color.parseColor("#ff8080"));
         }
 
         return convertView;
@@ -133,13 +139,29 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
         TextView tfUsername = convertView.findViewById(R.id.tf_username_body);
         TextView tfUsertype = convertView.findViewById(R.id.tf_usertype_body);
         Reservation reservation = (Reservation) getChild(groupPosition, childPosition);
+        Reservation reservationTranslated = new Reservation();
+
+        switch (reservation.getUsertype()) {
+            case "Student":
+                reservationTranslated.setUsertype(context.getString(R.string.usertype_student));
+                break;
+            case "Admim":
+                reservationTranslated.setUsertype(context.getString(R.string.usertype_admin));
+                break;
+            case "Federal Employee":
+                reservationTranslated.setUsertype(context.getString(R.string.usertype_federalemployee));
+                break;
+            default:
+                reservationTranslated.setUsertype(reservation.getUsertype());
+                break;
+        }
 
         tfDate.setText(reservation.getDate());
         tfStartTime.setText(reservation.getStartTime());
         tfEndTime.setText(reservation.getEndTime());
         tfPurpose.setText(reservation.getPurpose());
         tfUsername.setText(reservation.getUserName());
-        tfUsertype.setText(reservation.getUsertype());
+        tfUsertype.setText(reservationTranslated.getUsertype());
         Button approveBtn = convertView.findViewById(R.id.buttonApprove);
         Button disapproveBtn = convertView.findViewById(R.id.buttonDisapprove);
 
@@ -157,7 +179,7 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
                         .update("status", "approved")
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(finalConvertView.getContext(), "Reservation Approved!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(finalConvertView.getContext(), R.string.reservation_approved, Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -170,7 +192,7 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
                         .update("status", "disapproved")
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(finalConvertView.getContext(), "Reservation Disapproved!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(finalConvertView.getContext(), R.string.reservation_disapproved, Toast.LENGTH_SHORT).show();
                             }
                         });
             }

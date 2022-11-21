@@ -45,7 +45,6 @@ public class ReserveRequestsFragment extends Fragment {
     List<Reservation> reservationList = new ArrayList<>();
     private User currentUser = new User();
     List<DocumentReference> documentReferences = new ArrayList<>();
-    public String activeFilter = "";
     public ReserveRequestsFragment() {
         // Required empty public constructor
     }
@@ -163,6 +162,9 @@ public class ReserveRequestsFragment extends Fragment {
                                     Log.d("keyvalue", "Key = " + entry.getKey() + " Value = " + entry.getValue());
                                     for (Map.Entry<String, Object> entryMap2 : entry.getValue().entrySet()) {
                                         Log.d("keyvalue2", "Key = " + entryMap2.getKey() + " Value = " + entryMap2.getValue());
+                                        if (entryMap2.getKey().equals("situation")) {
+                                            reservation.setSituation(entryMap2.getValue().toString());
+                                        }
                                         if (entryMap2.getKey().equals("room")) {
                                             reservation.setRoom(entryMap2.getValue().toString());
                                         }
@@ -186,9 +188,6 @@ public class ReserveRequestsFragment extends Fragment {
                                         }
                                         if (entryMap2.getKey().equals("usertype")) {
                                             reservation.setUsertype(entryMap2.getValue().toString());
-                                        }
-                                        if (entryMap2.getKey().equals("situation")) {
-                                            reservation.setSituation(entryMap2.getValue().toString());
                                         }
                                         reservation.setDocumentId(entry.getKey());
                                     }
@@ -479,8 +478,8 @@ public class ReserveRequestsFragment extends Fragment {
                         }
                         if (notifyBool) {
                             Notification notification = new Notification.Builder(getContext(), channelId)
-                                    .setContentTitle("Your Reservation Request Situation Changed!")
-                                    .setContentText("The situation of the reservation of room " + reservationUpdated.getRoom() + " changed to " + reservationUpdated.getSituation())
+                                    .setContentTitle(getString(R.string.reservation_request_situation_changed))
+                                    .setContentText(getString(R.string.the_situation_of_the_reservation) + reservationUpdated.getRoom() + getString(R.string.changed_to) + reservationUpdated.getSituation())
                                     .setSmallIcon(android.R.drawable.stat_notify_chat)
                                     .build();
 
