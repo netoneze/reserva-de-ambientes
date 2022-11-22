@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
     Fragment active = fragment1;
     User currentUser = new User();
 
+    MenuItem menuItemAll = null;
+    MenuItem menuItemPending = null;
+    MenuItem menuItemApproved = null;
+    MenuItem menuItemDispproved = null;
+
+    String activeCheckFilter = "";
+    String activeCheckFilter1 = "";
+    String activeCheckFilter2 = "";
+    String activeCheckFilter3 = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,16 +90,23 @@ public class MainActivity extends AppCompatActivity {
                     fm.beginTransaction().hide(active).show(fragment1).commit();
                     setTitle(getString(R.string.my_reservations_title));
                     active = fragment1;
+                    if (!activeCheckFilter1.isEmpty()) {
+                        setSelectedItemColor(activeCheckFilter1);
+                    }
                     return true;
                 case R.id.management_page:
                     fm.beginTransaction().hide(active).show(fragment2).commit();
                     setTitle(getString(R.string.room_management_title));
                     active = fragment2;
+                    cleanAllMenuItemsCheck();
                     return true;
                 case R.id.reservation_requests:
                     fm.beginTransaction().hide(active).show(fragment3).commit();
                     setTitle(getString(R.string.reservation_requests_title));
                     active = fragment3;
+                    if (!activeCheckFilter3.isEmpty()) {
+                        setSelectedItemColor(activeCheckFilter3);
+                    }
                     return true;
             }
             return true;
@@ -100,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_bar_menu, menu);
+
+        menuItemAll = menu.findItem(R.id.filter_all);
+        menuItemPending = menu.findItem(R.id.filter_pending);
+        menuItemApproved = menu.findItem(R.id.filter_approved);
+        menuItemDispproved = menu.findItem(R.id.filter_disapproved);
+
         return true;
     }
 
@@ -112,9 +135,25 @@ public class MainActivity extends AppCompatActivity {
                     fm.beginTransaction().detach(active).commitNow();
                     fm.beginTransaction().attach(active).commitNow();
                     Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
+                    if (active == fragment1 && !activeCheckFilter1.isEmpty()) {
+                        setSelectedItemColor("all");
+                    }
+                    if (active == fragment3 && !activeCheckFilter3.isEmpty()) {
+                        if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
+                            setSelectedItemColor("pending");
+                        } else {
+                            setSelectedItemColor("all");
+                        }
+                    }
                 } else {
                     fm.beginTransaction().detach(active).attach(active).commit();
                     Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
+                    if (active == fragment1 && !activeCheckFilter1.isEmpty()) {
+                        setSelectedItemColor(activeCheckFilter1);
+                    }
+                    if (active == fragment3 && !activeCheckFilter3.isEmpty()) {
+                        setSelectedItemColor(activeCheckFilter3);
+                    }
                 }
                 break;
             case R.id.logout_menu:
@@ -138,9 +177,11 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaLista();
                         Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("all");
                     } else {
-                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservas();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("all");
                     }
                 }
                 if (active == fragment2) {
@@ -150,10 +191,11 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavel();
                         Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("all");
                     } else {
-                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
-
                         fragment3.populaSalasResponsavelTodas();
+                        Toast.makeText(this, R.string.listing_all, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("all");
                     }
                 }
                 break;
@@ -162,9 +204,11 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaListaBy("pending");
                         Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("pending");
                     } else {
-                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservasBy("pending");
+                        Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("pending");
                     }
                 }
                 if (active == fragment2) {
@@ -174,9 +218,11 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavelBy("pending");
                         Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("pending");
                     } else {
                         fragment3.populaSalasResponsavelTodasBy("pending");
                         Toast.makeText(this, R.string.listing_pending, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("pending");
                     }
                 }
                 break;
@@ -185,9 +231,11 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment1.populaListaBy("approved");
                         Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("approved");
                     } else {
-                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaTodasReservasBy("approved");
+                        Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("approved");
                     }
                 }
                 if (active == fragment2) {
@@ -197,20 +245,24 @@ public class MainActivity extends AppCompatActivity {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
                         fragment3.populaSalasResponsavelBy("approved");
                         Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("approved");
                     } else {
                         fragment3.populaSalasResponsavelTodasBy("approved");
                         Toast.makeText(this, R.string.listing_approved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("approved");
                     }
                 }
                 break;
             case R.id.filter_disapproved:
                 if (active == fragment1) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
-                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                         fragment1.populaListaBy("disapproved");
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("disapproved");
                     } else {
                         fragment1.populaListaTodasReservasBy("disapproved");
                         Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("disapproved");
                     }
                 }
                 if (active == fragment2) {
@@ -218,11 +270,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (active == fragment3) {
                     if (currentUser.getType().equals("Aluno") || currentUser.getType().equals("Servidor")) {
-                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
                         fragment3.populaSalasResponsavelBy("disapproved");
-                    } else {
                         Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("disapproved");
+                    } else {
                         fragment3.populaSalasResponsavelTodasBy("disapproved");
+                        Toast.makeText(this, R.string.listing_disapproved, Toast.LENGTH_SHORT).show();
+                        setSelectedItemColor("disapproved");
                     }
                 }
                 break;
@@ -230,5 +284,63 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setActiveCheck(String activeCheck) {
+        if (active == fragment1) {
+            activeCheckFilter1 = activeCheck;
+        }
+        if (active == fragment2) {
+            activeCheckFilter2 = activeCheck;
+        }
+        if (active == fragment3) {
+            activeCheckFilter3 = activeCheck;
+        }
+    }
+    public void setSelectedItemColor(String item) {
+        cleanAllMenuItemsCheck();
+        switch (item) {
+            case "all":
+                if (!menuItemAll.getTitle().toString().equals(getString(R.string.all) + " ✅")) {
+                    menuItemAll.setTitle(getString(R.string.all) + " ✅");
+                    setActiveCheck(item);
+                }
+                break;
+            case "pending":
+                if (!menuItemPending.getTitle().toString().equals(getString(R.string.pending) + " ✅")) {
+                    menuItemPending.setTitle(getString(R.string.pending) + " ✅");
+                    setActiveCheck(item);
+                }
+                break;
+            case "approved":
+                if (!menuItemApproved.getTitle().toString().equals(getString(R.string.approved) + " ✅")) {
+                    menuItemApproved.setTitle(getString(R.string.approved) + " ✅");
+                    setActiveCheck(item);
+                }
+                break;
+            case "disapproved":
+                if (!menuItemDispproved.getTitle().toString().equals(getString(R.string.disapproved) + " ✅")) {
+                    menuItemDispproved.setTitle(getString(R.string.disapproved) + " ✅");
+                    setActiveCheck(item);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void cleanAllMenuItemsCheck() {
+        if (menuItemAll.getTitle().toString().equals(getString(R.string.all) + " ✅")) {
+            menuItemAll.setTitle(getString(R.string.all));
+        }
+        if (menuItemPending.getTitle().toString().equals(getString(R.string.pending) + " ✅")) {
+            menuItemPending.setTitle(getString(R.string.pending));
+        }
+        if (menuItemApproved.getTitle().toString().equals(getString(R.string.approved) + " ✅")) {
+            menuItemApproved.setTitle(getString(R.string.approved));
+        }
+        if (menuItemDispproved.getTitle().toString().equals(getString(R.string.disapproved) + " ✅")) {
+            menuItemDispproved.setTitle(getString(R.string.disapproved));
+        }
     }
 }

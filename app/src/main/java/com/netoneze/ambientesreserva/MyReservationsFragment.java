@@ -169,6 +169,8 @@ public class MyReservationsFragment extends Fragment {
 
                         listView.setAdapter(adapter);
 
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setSelectedItemColor("all");
                     } else {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }
@@ -239,6 +241,8 @@ public class MyReservationsFragment extends Fragment {
 
                         listView.setAdapter(adapter);
 
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setSelectedItemColor("all");
                     } else {
                         Log.d("erro", "Error getting documents: ", task.getException());
                     }

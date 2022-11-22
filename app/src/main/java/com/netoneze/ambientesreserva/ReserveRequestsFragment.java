@@ -58,7 +58,6 @@ public class ReserveRequestsFragment extends Fragment {
         responsibleRoomsList = new ArrayList<>();
         reservationList = new ArrayList<>();
         populaUser();
-//        populaListaAndSetListener();
         return root;
     }
 
@@ -138,6 +137,8 @@ public class ReserveRequestsFragment extends Fragment {
                                 responsibleRoomsList.add(room);
                             }
                         }
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.activeCheckFilter3 = "all";
                         populaReservas();
                     } else {
                         Log.d("erro", "Error getting documents: ", task.getException());
@@ -239,6 +240,8 @@ public class ReserveRequestsFragment extends Fragment {
                                 responsibleRoomsList.add(room);
                             }
                         }
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.activeCheckFilter3 = status;
                         populaReservasBy(status);
                     } else {
                         Log.d("erro", "Error getting documents: ", task.getException());
