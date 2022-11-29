@@ -540,6 +540,7 @@ public class MyReservationsFragment extends Fragment {
 
                             notificationManager.notify(notifyId, notification);
                             populaUser();
+                            lista = new ArrayList<>();
                         }
                     }
                 } else {

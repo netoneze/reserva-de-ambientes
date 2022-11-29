@@ -189,8 +189,10 @@ public class AdapterListRequests extends BaseExpandableListAdapter {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).commitNow();
                                     mainActivity.getSupportFragmentManager().beginTransaction().attach(frg).commitNow();
+                                    mainActivity.setSelectedItemColor("pending");
                                 } else {
                                     mainActivity.getSupportFragmentManager().beginTransaction().detach(frg).attach(frg).commit();
+                                    mainActivity.setSelectedItemColor("pending");
                                 }
                                 Toast.makeText(finalConvertView.getContext(), R.string.reservation_approved, Toast.LENGTH_SHORT).show();
                             }
