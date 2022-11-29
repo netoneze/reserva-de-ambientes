@@ -534,7 +534,7 @@ public class MyReservationsFragment extends Fragment {
 
                             Notification notification = new Notification.Builder(getContext(), channelId)
                                     .setContentTitle(getString(R.string.your_reservation_status_changed))
-                                    .setContentText(getString(R.string.the_reservation_of_room) + reservationUpdated.getRoom() + getString(R.string.changed_to) + reservationUpdated.getStatus())
+                                    .setContentText(getString(R.string.the_reservation_of_room) + " " + reservationUpdated.getRoom() + " " + getString(R.string.changed_to) + " " + reservationUpdated.getStatus())
                                     .setSmallIcon(android.R.drawable.stat_notify_chat)
                                     .build();
 
@@ -570,6 +570,7 @@ public class MyReservationsFragment extends Fragment {
                             try {
                                 Date reservationDate = sdf.parse(reservation.getDate() + " " + reservation.getStartTime());
                                 assert reservationDate != null;
+                                reservationDate.setTime(reservationDate.getTime() - 3600 * 1000);
                                 if (reservationDate.before(todayDate)) {
                                     Toast.makeText(getContext(), R.string.cannot_cancel_alreadystarted_ended_reserve, Toast.LENGTH_SHORT).show();
                                     return;

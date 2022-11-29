@@ -88,7 +88,7 @@
     <string name="the_reservation_of_room">\The reservation of room \</string>
     <string name="changed_to">\ changed to \</string>
     <string name="cannot_cancel_cancelled_reserve">Cannot cancel a cancelled reserve!</string>
-    <string name="cannot_cancel_alreadystarted_ended_reserve">Cannot cancel reserve, it already started or its finished!</string>
+    <string name="cannot_cancel_alreadystarted_ended_reserve">Cannot cancel reserve</string>
     <string name="cancelled_reserve">Cancelled Reserve!</string>
     <string name="enter_your_name">Enter your Name</string>
     <string name="name_is_empty">Name is empty!</string>

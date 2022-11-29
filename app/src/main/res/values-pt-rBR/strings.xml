@@ -89,7 +89,7 @@
     <string name="the_reservation_of_room">\A reserva da sala \</string>
     <string name="changed_to">mudou para \</string>
     <string name="cannot_cancel_cancelled_reserve">Reserva já cancelada!</string>
-    <string name="cannot_cancel_alreadystarted_ended_reserve">Reserva já começou ou terminou</string>
+    <string name="cannot_cancel_alreadystarted_ended_reserve">Não é possível cancelar</string>
     <string name="cancelled_reserve">Reserva cancelada!</string>
     <string name="enter_your_name">Entre com seu nome</string>
     <string name="name_is_empty">Nome vazio!</string>
