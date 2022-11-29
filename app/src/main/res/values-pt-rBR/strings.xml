@@ -116,4 +116,5 @@
     <string name="saved_room">Sala Salva!</string>
     <string name="refresh">Atualizar</string>
     <string name="refreshed">Atualizado!</string>
+    <string name="maximum_limit_reservation">A reserva não pode ter mais que 4 horas</string>
 </resources>

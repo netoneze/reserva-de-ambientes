@@ -299,6 +299,10 @@ public class ReserveFormActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.reservation_must_have_60minutes, Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (difference_In_Hours > 4) {
+                Toast.makeText(this, R.string.maximum_limit_reservation, Toast.LENGTH_SHORT).show();
+                return;
+            }
             assert myReservationDateEndTime != null;
             if (myReservationDateEndTime.before(myReservationDateStartTime)) {
                 Toast.makeText(this, R.string.enddate_must_be_after_startdate, Toast.LENGTH_SHORT).show();
