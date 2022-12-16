@@ -195,7 +195,7 @@ public class ReserveRequestsFragment extends Fragment {
                                     reservationList.add(reservation);
                                 }
                             }
-                            setListenerForMyReservationsRequests(reservationList);
+//                            setListenerForMyReservationsRequests(reservationList);
                             populaLista(reservationList);
                         } else {
                             Log.d("erro", "Error getting documents: ", task.getException());
@@ -299,7 +299,7 @@ public class ReserveRequestsFragment extends Fragment {
                                     reservationList.add(reservation);
                                 }
                             }
-                            setListenerForMyReservationsRequests(reservationList);
+//                            setListenerForMyReservationsRequests(reservationList);
                             populaLista(reservationList);
                         } else {
                             Log.d("erro", "Error getting documents: ", task.getException());
@@ -389,8 +389,12 @@ public class ReserveRequestsFragment extends Fragment {
                     Log.d("noDocumentError", "No such document");
                 }
                 if (currentUser.getType().equals("2")) {
+                    reservationList = new ArrayList<>();
+                    responsibleRoomsList = new ArrayList<>();
                     populaSalasResponsavelTodas();
                 } else {
+                    reservationList = new ArrayList<>();
+                    responsibleRoomsList = new ArrayList<>();
                     populaSalasResponsavelBy("pending");
                 }
             } else {
@@ -482,14 +486,18 @@ public class ReserveRequestsFragment extends Fragment {
                         if (notifyBool) {
                             Notification notification = new Notification.Builder(getContext(), channelId)
                                     .setContentTitle(getString(R.string.reservation_request_situation_changed))
-                                    .setContentText(getString(R.string.the_situation_of_the_reservation) + reservationUpdated.getRoom() + getString(R.string.changed_to) + reservationUpdated.getSituation())
+                                    .setContentText(getString(R.string.the_situation_of_the_reservation) +  " " + reservationUpdated.getRoom() + " " + getString(R.string.changed_to) + " " + reservationUpdated.getSituation())
                                     .setSmallIcon(android.R.drawable.stat_notify_chat)
                                     .build();
 
                             notificationManager.notify(notifyId, notification);
+                            reservationList = new ArrayList<>();
+                            responsibleRoomsList = new ArrayList<>();
                             populaUser();
                         }
                         if (atualizaBool) {
+                            reservationList = new ArrayList<>();
+                            responsibleRoomsList = new ArrayList<>();
                             populaUser();
                         }
                     }

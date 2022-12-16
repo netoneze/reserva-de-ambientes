@@ -650,8 +650,10 @@ public class MyReservationsFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (currentUser.getType().equals("2")) {
                 populaListaTodasReservas();
+                populaListaAndSetListener();
             } else {
                 populaLista();
+                populaListaAndSetListener();
             }
         }
 

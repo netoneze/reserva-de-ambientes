@@ -116,4 +116,8 @@
     <string name="refresh">Refresh</string>
     <string name="refreshed">Refreshed!</string>
     <string name="maximum_limit_reservation">The reservation can\'t be more than 4 hours</string>
+    <string name="classroom">Classroom</string>
+    <string name="meeting_room">Meeting Room</string>
+    <string name="informatic_laboratory">Informatic Laboratory</string>
+    <string name="amphiteather">Amphiteather</string>
 </resources>

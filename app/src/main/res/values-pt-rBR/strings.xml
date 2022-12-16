@@ -117,4 +117,8 @@
     <string name="refresh">Atualizar</string>
     <string name="refreshed">Atualizado!</string>
     <string name="maximum_limit_reservation">A reserva não pode ter mais que 4 horas</string>
+    <string name="classroom">Sala de Aula</string>
+    <string name="meeting_room">Sala de Reunião</string>
+    <string name="informatic_laboratory">Laboratório de Informática</string>
+    <string name="amphiteather">Anfiteatro</string>
 </resources>

@@ -75,16 +75,18 @@ public class RoomFormActivity extends AppCompatActivity {
 
             nameEditText.setText(room.getName());
             switch (room.getType()) {
-                case "Classroom":
+                case "Sala de Aula":
                     typeSpinner.setSelection(1);
                     break;
-                case "Meeting Room":
+                case "Sala de Reunião":
                     typeSpinner.setSelection(2);
                     break;
-                case "Informatic Laboratory":
+                case "Laboratório de Informática":
                     typeSpinner.setSelection(3);
-                case "Amphitheater":
+                    break;
+                case "Anfiteatro":
                     typeSpinner.setSelection(4);
+                    break;
                 default:
                     break;
             }
@@ -248,10 +250,10 @@ public class RoomFormActivity extends AppCompatActivity {
         ArrayList<String> lista = new ArrayList<>();
 
         lista.add(getString(R.string.room_select)); // 0
-        lista.add("Classroom"); // 1
-        lista.add("Meeting Room"); // 2
-        lista.add("Informatic Laboratory"); // 3
-        lista.add("Amphitheater"); // 4
+        lista.add(getString(R.string.classroom)); // 1
+        lista.add(getString(R.string.meeting_room)); // 2
+        lista.add(getString(R.string.informatic_laboratory)); // 3
+        lista.add(getString(R.string.amphiteather)); // 4
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
 
